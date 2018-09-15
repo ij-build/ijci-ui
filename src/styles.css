@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.site-content {
+  flex: 1;
+}
+
+.ui.footer.segment {
+  padding: 1em;
+  margin-top: 1em;
+}
+
+.main.menu {
+  margin-top: 1em;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  transition: box-shadow 0.5s ease, padding 0.5s ease;
+}
+
+.main.menu.fixed {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}

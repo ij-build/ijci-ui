@@ -1,0 +1,50 @@
+<h2>Builds</h2>
+
+<div class="ui left icon input">
+  <i class="search icon"></i>
+  <input #search type="text" (keyup)="filter()" [(ngModel)]="filterQuery" placeholder="Enter filter term...">
+</div>
+
+<!-- <div class="ui center aligned basic segment">
+  <div class="ui action left icon input">
+    <i class="cogs icon"></i>
+    <input #newBuild (keyup.enter)="queueBuild(newBuild.value)" placeholder="github.com/efritz/ij">
+    <div class="ui teal button" (click)="queueBuild(newBuild.value)">Build</div>
+  </div>
+</div> -->
+
+<div class="ui unstackable divided items">
+  <div *ngFor="let build of filteredBuilds" class="item">
+    <div class="status-icon" [ngClass]="{
+      'positive': build.isSucceeded(),
+      'negative': build.isFailed() || build.isErrored()
+    }"></div>
+
+    <div class="content">
+      <i class="icon check positive" *ngIf="build.isSucceeded()"></i>
+      <i class="icon bug negative" *ngIf="build.isFailed() || build.isErrored()"></i>
+      <a class="header" routerLink="/builds/{{build.buildId}}">{{build.project.name}} ({{build.project.repositoryUrl}})</a>
+
+      <div class="description">
+        <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
+      </div>
+
+      <div class="extra">
+        <div class="ui grid">
+          <div class="two column row">
+            <div class="column">
+              <p>Triggered {{build.createdAt | amCalendar | lowercase}}</p>
+              <p *ngIf="!build.isQueued()">Last updated {{build.lastUpdatedAt() | amCalendar | lowercase}}</p>
+            </div>
+
+            <div class="column">
+              <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}}</p>
+              <p *ngIf="build.commitAuthorName"><i class="icon user"></i> {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
+              <p *ngIf="build.commitHash"><i class="icon clock"></i> Committed {{build.committedAt | amCalendar | lowercase}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

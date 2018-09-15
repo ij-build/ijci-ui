@@ -1,0 +1,28 @@
+.status-icon {
+  width: 10px;
+  margin-right: 1em;
+}
+
+.positive {
+  color: white;
+  background-color: green;
+}
+
+.negative {
+  color: white;
+  background-color: red;
+}
+
+.content .positive {
+  color: green;
+  background-color: inherit;
+}
+
+.content .negative {
+  color: red;
+  background-color: inherit;
+}
+
+.extra {
+  font-size: .85em;
+}
