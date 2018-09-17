@@ -10,8 +10,6 @@ export class MessageService {
   messages = [];
 
   add(message: string) {
-    if (true) { return; }
-
     const id = uuid();
     this.messages.push(new Message(id, message));
     setTimeout(() => this.remove(id), 5000);

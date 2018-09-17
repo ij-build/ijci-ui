@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Project } from '../project';
-import { BuildService } from '../build.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-projects',
@@ -16,7 +16,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private buildService: BuildService
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -28,7 +28,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.subscription = this.buildService.getProjects().subscribe(projects => {
+    this.subscription = this.apiService.getProjects().subscribe(projects => {
       this.projects = projects;
       this.filter();
     });

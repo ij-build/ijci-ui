@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Build } from '../build';
-import { BuildService } from '../build.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-builds',
@@ -17,8 +16,7 @@ export class BuildsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private router: Router,
-    private buildService: BuildService
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -30,7 +28,7 @@ export class BuildsComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.subscription = this.buildService.getBuilds().subscribe(builds => {
+    this.subscription = this.apiService.getBuilds().subscribe(builds => {
       this.builds = builds;
       this.filter();
     });
@@ -40,10 +38,13 @@ export class BuildsComponent implements OnInit, OnDestroy {
     this.filteredBuilds = this.builds.filter(b => this.matchesAny([
       b.project.name,
       b.project.repositoryUrl,
-      b.commitAuthorName,
-      b.commitAuthorEmail,
+      b.commitBranch,
       b.commitMessage,
-      b.commitHash
+      b.commitHash,
+      b.commitCommitterName,
+      b.commitCommitterEmail,
+      b.commitAuthorName,
+      b.commitAuthorEmail
     ]));
   }
 
@@ -55,11 +56,5 @@ export class BuildsComponent implements OnInit, OnDestroy {
     }
 
     return true;
-  }
-
-  queueBuild(repositoryUrl: string): void {
-    this.buildService.queueBuild(repositoryUrl).toPromise().then(buildId => {
-      this.router.navigate([`/builds/${buildId}`]);
-    });
   }
 }

@@ -1,0 +1,14 @@
+.step.positive {
+  color: white;
+  background-color: green;
+}
+
+.step.negative {
+  color: white;
+  background-color: red;
+}
+
+.step.positive .description,
+.step.negative .description {
+  color: white;
+}

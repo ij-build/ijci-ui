@@ -1,5 +1,5 @@
 <div *ngIf="project">
-  <h2>{{project.name}}</h2>
+  <h2>Project {{project.name}}</h2>
 
   <p>{{project.repositoryUrl}}</p>
 
@@ -15,7 +15,7 @@
       <div class="content">
         <i class="icon check positive" *ngIf="build.isSucceeded()"></i>
         <i class="icon bug negative" *ngIf="build.isFailed() || build.isErrored()"></i>
-        <a class="header" routerLink="/builds/{{build.buildId}}">{{project.name}} ({{project.repositoryUrl}})</a>
+        <a class="header" routerLink="/builds/{{build.buildId}}">{{project.name}}</a>
 
         <div class="description">
           <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
@@ -25,14 +25,16 @@
           <div class="ui grid">
             <div class="two column row">
               <div class="column">
-                <p>Triggered {{build.createdAt | amCalendar | lowercase}}</p>
+                <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
                 <p *ngIf="!build.isQueued()">Last updated {{build.lastUpdatedAt() | amCalendar | lowercase}}</p>
               </div>
 
               <div class="column">
-                <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}}</p>
-                <p *ngIf="build.commitAuthorName"><i class="icon user"></i> {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
-                <p *ngIf="build.commitHash"><i class="icon clock"></i> Committed {{build.committedAt | amCalendar | lowercase}}</p>
+                <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
+                <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
+                <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
+                <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.committedAt | amCalendar | lowercase}}</p>
+                <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.committedAt | amCalendar | lowercase}}</p>
               </div>
             </div>
           </div>

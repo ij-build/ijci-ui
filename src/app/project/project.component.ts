@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 
 import { Project } from '../project';
-import { BuildService } from '../build.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-project',
@@ -15,8 +14,7 @@ export class ProjectComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private buildSerivce: BuildService,
-    private location: Location
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -26,7 +24,7 @@ export class ProjectComponent implements OnInit {
   load(): void {
     const projectId = this.route.snapshot.paramMap.get('project_id');
 
-    this.buildSerivce.getProject(projectId).toPromise().then(project => {
+    this.apiService.getProject(projectId).toPromise().then(project => {
       this.project = project;
     });
   }

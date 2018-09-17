@@ -1,0 +1,67 @@
+<div *ngIf="build">
+  <h2>Build {{build.project.name}}</h2>
+
+  <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
+
+  <div class="ui center aligned basic segment">
+    <div class="ui ordered horizontal steps">
+      <div class="step" [ngClass]="{'active': build.isQueued()}">
+        <div class="content">
+          <div class="title">Queued</div>
+          <div class="description">{{build.createdAt | date:'short'}}</div>
+        </div>
+      </div>
+
+      <div class="step" [ngClass]="{'active': build.isInProgress()}">
+        <div class="content">
+          <div class="title">In Progress</div>
+          <div class="description">{{build.startedAt | date:'short'}}</div>
+        </div>
+      </div>
+
+      <div class="step" [ngClass]="{'disabled': !build.isTerminal(), 'positive': build.isSucceeded(), 'negative': !build.isSucceeded()}">
+        <div class="content">
+            <div class="title" *ngIf="!build.isTerminal()">Complete</div>
+            <div class="title" *ngIf="build.isTerminal()">{{build.buildStatus | titlecase}}</div>
+          <div class="description">{{build.completedAt | date:'short'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui segment" *ngIf="build.errorMessage">
+    <p>{{build.errorMessage}}</p>
+  </div>
+
+  <div class="ui segment">
+    <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
+    <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
+    <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
+    <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
+    <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.commitAuthoredAt | amCalendar | lowercase}}</p>
+    <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.commitCommittedAt | amCalendar | lowercase}}</p>
+
+    <!--
+    <div class="ui right floated primary button" routerLink="/builds/{{build.buildId}}">
+      Details
+      <i class="right chevron icon"></i>
+    </div>
+    -->
+  </div>
+
+  <h2>Logs</h2>
+
+  <div *ngFor="let buildLog of build.buildLogs" class="ui accordion field">
+    <div appAccordion [enabled]="buildLog.content">
+      <div class="title">
+        <i class="icon dropdown"></i>
+        <span>{{buildLog.name}}</span>
+        <span *ngIf="!buildLog.content"> (no content)</span>
+      </div>
+
+      <div class="content field" *ngIf="buildLog.content">
+        <pre>{{buildLog.content}}</pre>
+      </div>
+    </div>
+  </div>
+</div>

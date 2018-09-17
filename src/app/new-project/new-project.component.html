@@ -1,0 +1,15 @@
+<h2>New Project</h2>
+
+<form class="ui form">
+  <div class="field">
+    <label>Name</label>
+    <input name="name" type="text" [(ngModel)]="name" placeholder="Name">
+  </div>
+
+  <div class="field">
+    <label>Repository URL</label>
+    <input name="repositoryUrl" type="text" [(ngModel)]="repositoryUrl" placeholder="Repository URL">
+  </div>
+
+  <button class="ui button" type="submit" (click)="create()">Create Project</button>
+</form>

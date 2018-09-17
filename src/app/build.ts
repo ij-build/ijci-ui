@@ -6,11 +6,16 @@ export class Build {
     public buildId: string,
     public buildStatus: string,
     public agentAddr: string,
-    public commitAuthorName: string,
-    public commitAuthorEmail: string,
-    public committedAt: string,
+    public commitBranch: string,
     public commitHash: string,
     public commitMessage: string,
+    public commitAuthorName: string,
+    public commitAuthorEmail: string,
+    public commitAuthoredAt: string,
+    public commitCommitterName: string,
+    public commitCommitterEmail: string,
+    public commitCommittedAt: string,
+    public errorMessage: string,
     public createdAt: string,
     public startedAt: string,
     public completedAt: string,
@@ -31,11 +36,16 @@ export class Build {
   merge(other: Build): void {
     this.buildStatus = other.buildStatus;
     this.agentAddr = other.agentAddr;
-    this.commitAuthorName = other.commitAuthorName;
-    this.commitAuthorEmail = other.commitAuthorEmail;
-    this.committedAt = other.committedAt;
+    this.commitBranch = other.commitBranch;
     this.commitHash = other.commitHash;
     this.commitMessage = other.commitMessage;
+    this.commitAuthorName = other.commitAuthorName;
+    this.commitAuthorEmail = other.commitAuthorEmail;
+    this.commitAuthoredAt = other.commitAuthoredAt;
+    this.commitCommitterName = other.commitCommitterName;
+    this.commitCommitterEmail = other.commitCommitterEmail;
+    this.commitCommittedAt = other.commitCommittedAt;
+    this.errorMessage = other.errorMessage;
     this.startedAt = other.startedAt;
     this.completedAt = other.completedAt;
 

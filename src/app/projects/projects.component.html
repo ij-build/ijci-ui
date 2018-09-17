@@ -1,5 +1,10 @@
 <h2>Projects</h2>
 
+<div>
+  <a routerLink="/projects/new">New</a>
+</div>
+
+<!-- TODO - better style -->
 <div class="ui left icon input">
   <i class="search icon"></i>
   <input #search type="text" (keyup)="filter()" [(ngModel)]="filterQuery" placeholder="Enter filter term...">

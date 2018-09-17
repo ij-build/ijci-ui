@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit, OnChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 
 declare const $: any;
 
@@ -7,7 +7,6 @@ declare const $: any;
 })
 export class AccordionDirective implements OnChanges {
   @Input() enabled: string;
-
   private active = false;
 
   constructor(
@@ -15,9 +14,11 @@ export class AccordionDirective implements OnChanges {
   ) { }
 
   ngOnChanges() {
-    if (this.enabled && !this.active) {
-      this.active = true;
-      $(this.el.nativeElement).accordion();
+    if (!this.enabled || this.active) {
+      return
     }
+
+    this.active = true;
+    $(this.el.nativeElement).accordion();
   }
 }

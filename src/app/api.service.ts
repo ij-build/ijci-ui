@@ -11,7 +11,7 @@ import { MessageService } from './message.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BuildService {
+export class ApiService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService
@@ -49,14 +49,6 @@ export class BuildService {
     return this.wrap('getBuild', observable, null);
   }
 
-  queueBuild(repositoryUrl: string): Observable<string> {
-    const observable = this.http.post('/api/builds', {'repository_url': repositoryUrl}).pipe(
-      map(body => body['build']['build_id']),
-    );
-
-    return this.wrap('queueBuild', observable, null);
-  }
-
   getBuildLog(buildId: string, buildLogId: string): Observable<string> {
     const request = new HttpRequest('GET', `/api/builds/${buildId}/logs/${buildLogId}`, {
       responseType: 'text',
@@ -78,6 +70,28 @@ export class BuildService {
     return this.wrap('getBuildLog', observable, '');
   }
 
+  createProject(name: string, repositoryUrl: string): Observable<string> {
+    const observable = this.http.post('/api/projects', {'name': name, 'repository_url': repositoryUrl}).pipe(
+      map(body => body['project']['project_id']),
+    );
+
+    return this.wrap('createProject', observable, null);
+  }
+
+  queueBuild(projectId: string, repositoryUrl: string, commitBranch: string, commitHash: string): Observable<string> {
+    const payload = {};
+    if (projectId !== '') { payload['project_id'] = projectId; }
+    if (repositoryUrl !== '') { payload['repository_url'] = repositoryUrl; }
+    if (commitBranch !== '') { payload['commit_branch'] = commitBranch; }
+    if (commitHash !== '') { payload['commit_hash'] = commitHash; }
+
+    const observable = this.http.post('/api/builds', payload).pipe(
+      map(body => body['build']['build_id']),
+    );
+
+    return this.wrap('queueBuild', observable, null);
+  }
+
   //
   //
 
@@ -97,7 +111,7 @@ export class BuildService {
   }
 
   private log(method: string, identifier: string, message: string) {
-    this.messageService.add(`[${identifier}] BuildService.${method}: ${message}`);
+    this.messageService.add(`[${identifier}] ApiService.${method}: ${message}`);
   }
 }
 
@@ -127,11 +141,16 @@ function parseBuild(data: object): Build {
     data['build_id'],
     data['build_status'],
     data['agent_addr'],
-    data['commit_author_name'],
-    data['commit_author_email'],
-    data['committed_at'],
+    data['commit_branch'],
     data['commit_hash'],
     data['commit_message'],
+    data['commit_author_name'],
+    data['commit_author_email'],
+    data['commit_authored_at'],
+    data['commit_committer_name'],
+    data['commit_committer_email'],
+    data['commit_committed_at'],
+    data['error_message'],
     data['created_at'],
     data['started_at'],
     data['completed_at'],
