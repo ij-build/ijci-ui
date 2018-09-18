@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 
 import { Project } from '../project';
 import { ApiService } from '../api.service';
@@ -9,11 +8,10 @@ import { ApiService } from '../api.service';
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent implements OnInit, OnDestroy {
+export class ProjectsComponent implements OnInit {
   projects: Project[];
   filteredProjects: Project[];
   filterQuery = '';
-  subscription: Subscription;
 
   constructor(
     private apiService: ApiService
@@ -23,12 +21,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
   load(): void {
-    this.subscription = this.apiService.getProjects().subscribe(projects => {
+    this.apiService.getProjects().toPromise().then(projects => {
       this.projects = projects;
       this.filter();
     });
