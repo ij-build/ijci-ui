@@ -37,34 +37,29 @@
     <p>{{build.errorMessage}}</p>
   </div>
 
-  <div class="ui segment">
+  <div class="ui segment" *ngIf="build.commitMessage || build.commitHash">
     <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
     <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
     <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
     <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
     <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.commitAuthoredAt | amCalendar | lowercase}}</p>
     <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.commitCommittedAt | amCalendar | lowercase}}</p>
-
-    <!--
-    <div class="ui right floated primary button" routerLink="/builds/{{build.buildId}}">
-      Details
-      <i class="right chevron icon"></i>
-    </div>
-    -->
   </div>
 
-  <h2>Logs</h2>
+  <div *ngIf="build.buildLogs.length > 0">
+    <h2>Logs</h2>
 
-  <div *ngFor="let buildLog of build.buildLogs" class="ui accordion field">
-    <div appAccordion [enabled]="buildLog.content">
-      <div class="title">
-        <i class="icon dropdown"></i>
-        <span>{{buildLog.name}}</span>
-        <span *ngIf="!buildLog.content"> (no content)</span>
-      </div>
+    <div *ngFor="let buildLog of build.buildLogs" class="ui accordion field">
+      <div appAccordion [enabled]="buildLog.content">
+        <div class="title">
+          <i class="icon dropdown"></i>
+          <span>{{buildLog.name}}</span>
+          <span *ngIf="!buildLog.content"> (no content)</span>
+        </div>
 
-      <div class="content field" *ngIf="buildLog.content">
-        <pre>{{buildLog.content}}</pre>
+        <div class="content field" *ngIf="buildLog.content">
+          <pre>{{buildLog.content}}</pre>
+        </div>
       </div>
     </div>
   </div>

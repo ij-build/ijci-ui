@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectComponent } from './project/project.component';
 import { NewProjectComponent } from './new-project/new-project.component';
+import { EditProjectComponent } from './edit-project/edit-project.component';
 import { BuildsComponent } from './builds/builds.component';
 import { BuildComponent } from './build/build.component';
 import { NewBuildComponent } from './new-build/new-build.component';
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
   { path: 'projects', component: ProjectsComponent },
   { path: 'projects/new', component: NewProjectComponent },
   { path: 'projects/:project_id', component: ProjectComponent },
+  { path: 'projects/:project_id/edit', component: EditProjectComponent },
   { path: 'builds', component: BuildsComponent },
   { path: 'builds/new', component: NewBuildComponent },
   { path: 'builds/:build_id', component: BuildComponent },
@@ -34,21 +36,22 @@ const appRoutes: Routes = [
     AppComponent,
     ProjectsComponent,
     ProjectComponent,
+    NewProjectComponent,
+    EditProjectComponent,
     BuildsComponent,
     BuildComponent,
+    NewBuildComponent,
     MessagesComponent,
     NotfoundComponent,
     AccordionDirective,
-    NewBuildComponent,
-    NewProjectComponent,
     DropdownDirective
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes),
-    MomentModule
+    MomentModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]

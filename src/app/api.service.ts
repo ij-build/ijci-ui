@@ -79,11 +79,29 @@ export class ApiService {
   }
 
   createProject(name: string, repositoryUrl: string): Observable<string> {
-    const observable = this.http.post('/api/projects', {'name': name, 'repository_url': repositoryUrl}).pipe(
+    const payload = {
+      'name': name,
+      'repository_url': repositoryUrl,
+    };
+
+    const observable = this.http.post('/api/projects', payload).pipe(
       map(body => body['project']['project_id'])
     );
 
     return this.wrap('createProject', observable, null);
+  }
+
+  updateProject(project: Project): Observable<Project> {
+    const payload = {
+      'name': project.name,
+      'repository_url': project.repositoryUrl,
+    };
+
+    const observable = this.http.patch(`/api/projects/${project.projectId}`, payload).pipe(
+      map(body => parseProject(body['project']))
+    );
+
+    return this.wrap('updateProject', observable, null);
   }
 
   deleteProject(projectId: string): Observable<void> {

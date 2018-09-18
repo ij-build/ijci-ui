@@ -5,9 +5,11 @@
     <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
   </div>
 
-  <p>{{project.repositoryUrl}}</p>
+  <div>
+    <a class="ui button" routerLink="/projects/{{project.projectId}}/edit">Edit Project</a>
+  </div>
 
-  <!-- TODO - Make a partial template -->
+  <p>{{project.repositoryUrl}}</p>
 
   <div class="ui unstackable divided items">
     <div *ngFor="let build of project.builds" class="item">
