@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
 import { startWith } from 'rxjs/operators';
@@ -19,8 +19,9 @@ export class BuildComponent implements OnInit, OnDestroy {
   logSubscriptions = [];
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
-    private buildService: ApiService,
+    private apiService: ApiService,
     private location: Location
   ) { }
 
@@ -41,7 +42,7 @@ export class BuildComponent implements OnInit, OnDestroy {
 
     // TODO - find a better strategy for this
     this.timerSubscription = interval(5000).pipe(startWith(0)).subscribe(() => {
-      this.buildService.getBuild(buildId).toPromise().then(build => {
+      this.apiService.getBuild(buildId).toPromise().then(build => {
         this.refresh(build);
       });
     });
@@ -63,12 +64,18 @@ export class BuildComponent implements OnInit, OnDestroy {
         continue;
       }
 
-      this.logSubscriptions.push(this.buildService.getBuildLog(build.buildId, buildLog.buildLogId).subscribe(content => {
+      this.logSubscriptions.push(this.apiService.getBuildLog(build.buildId, buildLog.buildLogId).subscribe(content => {
         buildLog.content = content;
       }));
 
       this.activeLogs.add(buildLog.buildLogId);
     }
+  }
+
+  delete(): void {
+    this.apiService.deleteBuild(this.build.buildId).toPromise().then(() => {
+      this.router.navigate(['/builds']);
+    });
   }
 
   back(): void {

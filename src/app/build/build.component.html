@@ -1,6 +1,10 @@
 <div *ngIf="build">
   <h2>Build {{build.project.name}}</h2>
 
+  <div>
+    <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
+  </div>
+
   <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
 
   <div class="ui center aligned basic segment">

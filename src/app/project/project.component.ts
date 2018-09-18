@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Project } from '../project';
 import { ApiService } from '../api.service';
@@ -13,6 +13,7 @@ export class ProjectComponent implements OnInit {
   project: Project;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private apiService: ApiService
   ) { }
@@ -26,6 +27,12 @@ export class ProjectComponent implements OnInit {
 
     this.apiService.getProject(projectId).toPromise().then(project => {
       this.project = project;
+    });
+  }
+
+  delete(): void {
+    this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
+      this.router.navigate(['/projects']);
     });
   }
 }

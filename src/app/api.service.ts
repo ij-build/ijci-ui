@@ -49,6 +49,14 @@ export class ApiService {
     return this.wrap('getBuild', observable, null);
   }
 
+  deleteBuild(buildId: string): Observable<void> {
+    const observable = this.http.delete(`/api/builds/${buildId}`).pipe(
+      map(_ => null)
+    );
+
+    return this.wrap('deleteBuild', observable, null);
+  }
+
   getBuildLog(buildId: string, buildLogId: string): Observable<string> {
     const request = new HttpRequest('GET', `/api/builds/${buildId}/logs/${buildLogId}`, {
       responseType: 'text',
@@ -72,10 +80,18 @@ export class ApiService {
 
   createProject(name: string, repositoryUrl: string): Observable<string> {
     const observable = this.http.post('/api/projects', {'name': name, 'repository_url': repositoryUrl}).pipe(
-      map(body => body['project']['project_id']),
+      map(body => body['project']['project_id'])
     );
 
     return this.wrap('createProject', observable, null);
+  }
+
+  deleteProject(projectId: string): Observable<void> {
+    const observable = this.http.delete(`/api/projects/${projectId}`).pipe(
+      map(_ => null)
+    );
+
+    return this.wrap('deleteProject', observable, null);
   }
 
   queueBuild(projectId: string, repositoryUrl: string, commitBranch: string, commitHash: string): Observable<string> {

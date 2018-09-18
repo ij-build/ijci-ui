@@ -1,6 +1,10 @@
 <div *ngIf="project">
   <h2>Project {{project.name}}</h2>
 
+  <div>
+    <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
+  </div>
+
   <p>{{project.repositoryUrl}}</p>
 
   <!-- TODO - Make a partial template -->
