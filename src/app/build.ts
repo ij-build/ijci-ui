@@ -24,9 +24,9 @@ export class Build {
 
   isQueued(): boolean { return this.buildStatus === 'queued'; }
   isInProgress(): boolean { return this.buildStatus === 'in-progress'; }
-  isSucceeded(): boolean { return this.buildStatus == 'succeeded' };
-  isFailed(): boolean { return this.buildStatus == 'failed' };
-  isErrored(): boolean { return this.buildStatus == 'errored' };
+  isSucceeded(): boolean { return this.buildStatus === 'succeeded'; }
+  isFailed(): boolean { return this.buildStatus === 'failed'; }
+  isErrored(): boolean { return this.buildStatus === 'errored'; }
   isTerminal(): boolean { return !this.isQueued() && !this.isInProgress(); }
 
   lastUpdatedAt(): string {

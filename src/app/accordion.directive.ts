@@ -15,7 +15,7 @@ export class AccordionDirective implements OnChanges {
 
   ngOnChanges() {
     if (!this.enabled || this.active) {
-      return
+      return;
     }
 
     this.active = true;

@@ -78,6 +78,8 @@ export class ApiService {
             return event['partialText'];
           }
 
+          break;
+
         case HttpEventType.Response:
           return event['body'];
       }
@@ -125,10 +127,10 @@ export class ApiService {
       'project_id': projectId,
       'repository_url': repositoryUrl,
       'commit_branch': commitBranch,
-      'commit_hash': commitHash,
+      'commit_hash': commitHash
     };
 
-    for (let key of Object.keys(payload)) {
+    for (const key of Object.keys(payload)) {
       if (!payload[key]) {
         delete payload[key];
       }

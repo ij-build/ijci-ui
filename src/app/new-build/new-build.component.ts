@@ -13,10 +13,10 @@ export class NewBuildComponent implements OnInit {
   projects: Project[];
   loaded = false;
 
-  projectId: string = '';
-  repositoryUrl: string = '';
-  commitHash: string = '';
-  commitBranch: string = '';
+  projectId = '';
+  repositoryUrl = '';
+  commitHash = '';
+  commitBranch = '';
 
   constructor(
     private router: Router,

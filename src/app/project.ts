@@ -12,6 +12,6 @@ export class Project {
   ) { }
 
   isSucceeded(): boolean {
-    return this.lastBuildStatus == 'succeeded';
+    return this.lastBuildStatus === 'succeeded';
   }
 }
