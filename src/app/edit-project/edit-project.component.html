@@ -1,15 +1,17 @@
-<h2>Project {{project.name}}</h2>
+<div *ngIf="project">
+  <h2>Project {{project.name}}</h2>
 
-<form class="ui form">
-  <div class="field">
-    <label>Name</label>
-    <input name="name" type="text" [(ngModel)]="project.name" placeholder="Name">
-  </div>
+  <form class="ui form">
+    <div class="field">
+      <label>Name</label>
+      <input name="name" type="text" [(ngModel)]="project.name" placeholder="Name">
+    </div>
 
-  <div class="field">
-    <label>Repository URL</label>
-    <input name="repositoryUrl" type="text" [(ngModel)]="project.repositoryUrl" placeholder="Repository URL">
-  </div>
+    <div class="field">
+      <label>Repository URL</label>
+      <input name="repositoryUrl" type="text" [(ngModel)]="project.repositoryUrl" placeholder="Repository URL">
+    </div>
 
-  <button class="ui button" type="submit" (click)="update()">Update Project</button>
-</form>
+    <button class="ui button" type="submit" (click)="update()">Update Project</button>
+  </form>
+</div>
