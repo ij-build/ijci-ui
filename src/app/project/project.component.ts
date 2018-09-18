@@ -30,6 +30,17 @@ export class ProjectComponent implements OnInit {
     });
   }
 
+  queue(): void {
+    this.apiService.queueBuild(
+      this.project.projectId,
+      this.project.repositoryUrl,
+      '',
+      ''
+    ).toPromise().then(buildId => {
+      this.router.navigate([`/builds/${buildId}`]);
+    });
+  }
+
   delete(): void {
     this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
       this.router.navigate(['/projects']);
