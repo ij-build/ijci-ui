@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { Subscription, interval } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
@@ -21,8 +20,7 @@ export class BuildComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: ApiService,
-    private location: Location
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
@@ -78,7 +76,9 @@ export class BuildComponent implements OnInit, OnDestroy {
     });
   }
 
-  back(): void {
-    this.location.back();
+  requeue(): void {
+    this.apiService.requeueBuild(this.build.buildId).toPromise().then(() => {
+      this.load();
+    });
   }
 }

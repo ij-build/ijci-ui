@@ -5,6 +5,10 @@
     <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
   </div>
 
+  <div *ngIf="build.buildStatus == 'errored'">
+    <a class="ui button" (click)="requeue()">Requeue</a>
+  </div>
+
   <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
 
   <div class="ui center aligned basic segment">

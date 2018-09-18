@@ -113,17 +113,32 @@ export class ApiService {
   }
 
   queueBuild(projectId: string, repositoryUrl: string, commitBranch: string, commitHash: string): Observable<string> {
-    const payload = {};
-    if (projectId !== '') { payload['project_id'] = projectId; }
-    if (repositoryUrl !== '') { payload['repository_url'] = repositoryUrl; }
-    if (commitBranch !== '') { payload['commit_branch'] = commitBranch; }
-    if (commitHash !== '') { payload['commit_hash'] = commitHash; }
+    const payload = {
+      'project_id': projectId,
+      'repository_url': repositoryUrl,
+      'commit_branch': commitBranch,
+      'commit_hash': commitHash,
+    };
+
+    for (let key of Object.keys(payload)) {
+      if (!payload[key]) {
+        delete payload[key];
+      }
+    }
 
     const observable = this.http.post('/api/builds', payload).pipe(
-      map(body => body['build']['build_id']),
+      map(body => body['build']['build_id'])
     );
 
     return this.wrap('queueBuild', observable, null);
+  }
+
+  requeueBuild(buildId: string): Observable<void> {
+    const observable = this.http.post(`/api/builds/${buildId}/requeue`, {}).pipe(
+      map(_ => null)
+    );
+
+    return this.wrap('requeueBuild', observable, null);
   }
 
   //
