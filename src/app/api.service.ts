@@ -41,6 +41,14 @@ export class ApiService {
     return this.wrap('getBuilds', observable, []);
   }
 
+  getQueue(): Observable<Build[]> {
+    const observable = this.http.get<object[]>('/api/queue').pipe(
+      map(body => parseBuilds(body['builds']))
+    );
+
+    return this.wrap('getQueue', observable, []);
+  }
+
   getBuild(buildId: string): Observable<Build> {
     const observable = this.http.get(`/api/builds/${buildId}`).pipe(
       map(body => parseBuild(body['build']))

@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MomentModule } from 'ngx-moment';
 
 import { AppComponent } from './app.component';
+import { QueueComponent } from './queue/queue.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectComponent } from './project/project.component';
 import { NewProjectComponent } from './new-project/new-project.component';
@@ -20,6 +21,7 @@ import { DropdownDirective } from './dropdown.directive';
 
 const appRoutes: Routes = [
   { path: '404', component: NotfoundComponent },
+  { path: 'queue', component: QueueComponent },
   { path: 'projects', component: ProjectsComponent },
   { path: 'projects/new', component: NewProjectComponent },
   { path: 'projects/:project_id', component: ProjectComponent },
@@ -33,18 +35,19 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
+    AccordionDirective,
+    DropdownDirective,
+    MessagesComponent,
+    NotfoundComponent,
     AppComponent,
+    QueueComponent,
     ProjectsComponent,
     ProjectComponent,
     NewProjectComponent,
     EditProjectComponent,
     BuildsComponent,
     BuildComponent,
-    NewBuildComponent,
-    MessagesComponent,
-    NotfoundComponent,
-    AccordionDirective,
-    DropdownDirective
+    NewBuildComponent
   ],
   imports: [
     BrowserModule,

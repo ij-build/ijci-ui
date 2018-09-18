@@ -1,0 +1,23 @@
+<h2>Build Queue</h2>
+
+<!-- TODO - also show what's in progress -->
+
+<div class="ui unstackable divided items">
+  <div *ngFor="let build of builds" class="item">
+    <div class="status-icon"></div>
+
+    <div class="content">
+      <a class="header" routerLink="/builds/{{build.buildId}}">{{build.project.name}}</a>
+
+      <div class="extra">
+        <div class="ui grid">
+          <div class="two column row">
+            <div class="column">
+              <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
