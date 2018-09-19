@@ -70,6 +70,12 @@ export class BuildComponent implements OnInit, OnDestroy {
     }
   }
 
+  stop(): void {
+    this.apiService.stopBuild(this.build.buildId).toPromise().then(() => {
+      this.load();
+    });
+  }
+
   delete(): void {
     this.apiService.deleteBuild(this.build.buildId).toPromise().then(() => {
       this.router.navigate(['/builds']);

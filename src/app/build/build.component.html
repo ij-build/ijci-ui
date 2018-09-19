@@ -5,6 +5,10 @@
     <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
   </div>
 
+  <div *ngIf="build.buildStatus == 'in-progress'">
+    <a class="ui button" (click)="stop()">Stop</a>
+  </div>
+
   <div *ngIf="build.buildStatus == 'errored'">
     <a class="ui button" (click)="requeue()">Requeue</a>
   </div>

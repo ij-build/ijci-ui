@@ -143,6 +143,14 @@ export class ApiService {
     return this.wrap('queueBuild', observable, null);
   }
 
+  stopBuild(buildId: string): Observable<void> {
+    const observable = this.http.post(`/api/builds/${buildId}/stop`, {}).pipe(
+      map(_ => null)
+    );
+
+    return this.wrap('stopBuild', observable, null);
+  }
+
   requeueBuild(buildId: string): Observable<void> {
     const observable = this.http.post(`/api/builds/${buildId}/requeue`, {}).pipe(
       map(_ => null)
