@@ -17,13 +17,15 @@ export class Build {
     public commitCommittedAt: string,
     public errorMessage: string,
     public createdAt: string,
+    public queuedAt: string,
     public startedAt: string,
     public completedAt: string,
+    public canceled: boolean,
     public buildLogs: BuildLog[]
   ) { }
 
-  isQueued(): boolean { return this.buildStatus === 'queued'; }
-  isInProgress(): boolean { return this.buildStatus === 'in-progress'; }
+  isQueued(): boolean { return !this.canceled && this.buildStatus === 'queued'; }
+  isInProgress(): boolean { return !this.canceled && this.buildStatus === 'in-progress'; }
   isSucceeded(): boolean { return this.buildStatus === 'succeeded'; }
   isFailed(): boolean { return this.buildStatus === 'failed'; }
   isErrored(): boolean { return this.buildStatus === 'errored'; }
@@ -46,8 +48,10 @@ export class Build {
     this.commitCommitterEmail = other.commitCommitterEmail;
     this.commitCommittedAt = other.commitCommittedAt;
     this.errorMessage = other.errorMessage;
+    this.queuedAt = other.queuedAt;
     this.startedAt = other.startedAt;
     this.completedAt = other.completedAt;
+    this.canceled = other.canceled;
 
     for (const buildLog of other.buildLogs) {
       if (!this.hasBuildLog(buildLog.buildLogId)) {

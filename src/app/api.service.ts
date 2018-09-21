@@ -143,12 +143,12 @@ export class ApiService {
     return this.wrap('queueBuild', observable, null);
   }
 
-  stopBuild(buildId: string): Observable<void> {
-    const observable = this.http.post(`/api/builds/${buildId}/stop`, {}).pipe(
+  cancelBuild(buildId: string): Observable<void> {
+    const observable = this.http.post(`/api/builds/${buildId}/cancel`, {}).pipe(
       map(_ => null)
     );
 
-    return this.wrap('stopBuild', observable, null);
+    return this.wrap('cancelBuild', observable, null);
   }
 
   requeueBuild(buildId: string): Observable<void> {
@@ -219,8 +219,10 @@ function parseBuild(data: object): Build {
     data['commit_committed_at'],
     data['error_message'],
     data['created_at'],
+    data['queued_at'],
     data['started_at'],
     data['completed_at'],
+    data['canceled'],
     (data['build_logs'] || []).map(parseBuildLog)
   );
 }

@@ -1,40 +1,53 @@
 <div *ngIf="build">
   <h2>Build {{build.project.name}}</h2>
 
-  <div>
-    <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
-  </div>
+  <a class="ui basic primary button" (click)="cancel()" *ngIf="!build.canceled && !build.isTerminal()">
+    <i class="stop circle icon"></i> Cancel
+  </a>
 
-  <div *ngIf="build.buildStatus == 'in-progress'">
-    <a class="ui button" (click)="stop()">Stop</a>
-  </div>
+  <a class="ui basic primary button" (click)="requeue()" *ngIf="build.canceled || build.isTerminal()">
+    <i class="undo icon"></i> Requeue
+  </a>
 
-  <div *ngIf="build.buildStatus == 'errored'">
-    <a class="ui button" (click)="requeue()">Requeue</a>
-  </div>
+  <a class="ui basic negative button" (click)="delete()" *ngIf="build.canceled || build.isTerminal()">
+    <i class="trash alternate icon"></i> Delete
+  </a>
 
   <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
 
   <div class="ui center aligned basic segment">
     <div class="ui ordered horizontal steps">
-      <div class="step" [ngClass]="{'active': build.isQueued()}">
+      <div class="step" [ngClass]="{'active': build.isQueued() && build.queuedAt == build.createdAt}">
         <div class="content">
           <div class="title">Queued</div>
           <div class="description">{{build.createdAt | date:'short'}}</div>
         </div>
       </div>
 
-      <div class="step" [ngClass]="{'active': build.isInProgress()}">
+      <div class="step" [ngClass]="{'active': build.isQueued()}" *ngIf="build.queuedAt != build.createdAt">
+        <div class="content">
+          <div class="title">Requeued</div>
+          <div class="description">{{build.queuedAt | date:'short'}}</div>
+        </div>
+      </div>
+
+      <div class="step" [ngClass]="{'active': build.isInProgress()}" *ngIf="!build.canceled || build.startedAt">
         <div class="content">
           <div class="title">In Progress</div>
           <div class="description">{{build.startedAt | date:'short'}}</div>
         </div>
       </div>
 
-      <div class="step" [ngClass]="{'disabled': !build.isTerminal(), 'positive': build.isSucceeded(), 'negative': !build.isSucceeded()}">
+      <div class="step active" *ngIf="build.canceled">
         <div class="content">
-            <div class="title" *ngIf="!build.isTerminal()">Complete</div>
-            <div class="title" *ngIf="build.isTerminal()">{{build.buildStatus | titlecase}}</div>
+          <div class="title">Canceled</div>
+        </div>
+      </div>
+
+      <div class="step" [ngClass]="{'positive': build.isSucceeded(), 'negative': build.isErrored() || build.isFailed()}" *ngIf="!build.canceled">
+        <div class="content">
+          <div class="title" *ngIf="!build.isTerminal()">Complete</div>
+          <div class="title" *ngIf="build.isTerminal()">{{build.buildStatus | titlecase}}</div>
           <div class="description">{{build.completedAt | date:'short'}}</div>
         </div>
       </div>
@@ -45,6 +58,7 @@
     <p>{{build.errorMessage}}</p>
   </div>
 
+  <!-- TODO - show branch if possible -->
   <div class="ui segment" *ngIf="build.commitMessage || build.commitHash">
     <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
     <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>

@@ -70,8 +70,8 @@ export class BuildComponent implements OnInit, OnDestroy {
     }
   }
 
-  stop(): void {
-    this.apiService.stopBuild(this.build.buildId).toPromise().then(() => {
+  cancel(): void {
+    this.apiService.cancelBuild(this.build.buildId).toPromise().then(() => {
       this.load();
     });
   }
