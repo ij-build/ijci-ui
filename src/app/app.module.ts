@@ -18,6 +18,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { AccordionDirective } from './accordion.directive';
 import { DropdownDirective } from './dropdown.directive';
+import { PopupDirective } from './popup.directive';
+import { ModalDirective } from './modal.directive';
 
 const appRoutes: Routes = [
   { path: '404', component: NotfoundComponent },
@@ -47,7 +49,9 @@ const appRoutes: Routes = [
     EditProjectComponent,
     BuildsComponent,
     BuildComponent,
-    NewBuildComponent
+    NewBuildComponent,
+    PopupDirective,
+    ModalDirective
   ],
   imports: [
     BrowserModule,

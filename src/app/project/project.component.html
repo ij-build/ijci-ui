@@ -2,14 +2,22 @@
   <h2>Project {{project.name}}</h2>
 
   <div>
-    <a class="ui button negative" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
+    <a class="ui primary basic button" (click)="queue()"><i class="cogs icon"></i> Queue Build</a>
+    <a class="ui primary basic button" routerLink="/projects/{{project.projectId}}/edit"><i class="pencil icon"></i> Edit Project</a>
+    <a class="ui negative basic button" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
   </div>
 
-  <div>
-    <a class="ui button" (click)="queue()">Queue Build</a>
-  </div>
-  <div>
-    <a class="ui button" routerLink="/projects/{{project.projectId}}/edit">Edit Project</a>
+  <div appModal class="ui modal">
+    <div class="ui icon header">
+      <i class="exclamation triangle icon"></i> Delete project?
+    </div>
+    <div class="content">
+      <p>This will delete all associated builds, history, artifacts, and logs.</p>
+    </div>
+    <div class="actions">
+      <div class="ui basic cancel button"><i class="check icon"></i> No</div>
+      <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
+    </div>
   </div>
 
   <p>{{project.repositoryUrl}}</p>

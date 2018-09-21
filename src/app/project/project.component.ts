@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Project } from '../project';
 import { ApiService } from '../api.service';
+import { ModalDirective } from '../modal.directive';
 
 @Component({
   selector: 'app-project',
@@ -10,6 +11,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./project.component.css']
 })
 export class ProjectComponent implements OnInit {
+  @ViewChild(ModalDirective) modal;
   project: Project;
 
   constructor(
@@ -42,8 +44,8 @@ export class ProjectComponent implements OnInit {
   }
 
   delete(): void {
-    this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
+    this.modal.show(() => this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
       this.router.navigate(['/projects']);
-    });
+    }));
   }
 }
