@@ -6,20 +6,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { MomentModule } from 'ngx-moment';
 
 import { AppComponent } from './app.component';
-import { QueueComponent } from './queue/queue.component';
-import { ProjectsComponent } from './projects/projects.component';
-import { ProjectComponent } from './project/project.component';
-import { NewProjectComponent } from './new-project/new-project.component';
-import { EditProjectComponent } from './edit-project/edit-project.component';
-import { BuildsComponent } from './builds/builds.component';
-import { BuildComponent } from './build/build.component';
-import { NewBuildComponent } from './new-build/new-build.component';
-import { MessagesComponent } from './messages/messages.component';
-import { NotfoundComponent } from './notfound/notfound.component';
-import { AccordionDirective } from './accordion.directive';
-import { DropdownDirective } from './dropdown.directive';
-import { PopupDirective } from './popup.directive';
-import { ModalDirective } from './modal.directive';
+import { QueueComponent } from './components/queue/queue.component';
+import { ProjectsComponent } from './components/projects/projects/projects.component';
+import { ProjectComponent } from './components/projects/project/project.component';
+import { NewProjectComponent } from './components/projects/project-new/project-new.component';
+import { EditProjectComponent } from './components/projects/project-edit/project-edit.component';
+import { BuildsComponent } from './components/builds/builds/builds.component';
+import { BuildComponent } from './components/builds/build/build.component';
+import { NewBuildComponent } from './components/builds/build-new/build-new.component';
+import { MessagesComponent } from './shared/components/messages/messages.component';
+import { NotfoundComponent } from './components/notfound/notfound.component';
+import { AccordionDirective } from './shared/directives/accordion.directive';
+import { DropdownDirective } from './shared/directives/dropdown.directive';
+import { PopupDirective } from './shared/directives/popup.directive';
+import { ModalDirective } from './shared/directives/modal.directive';
 
 const appRoutes: Routes = [
   { path: '404', component: NotfoundComponent },
