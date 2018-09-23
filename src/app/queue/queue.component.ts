@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Build } from '../build';
+import { Queue } from '../queue';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./queue.component.css']
 })
 export class QueueComponent implements OnInit {
-  builds: Build[];
+  queue: Queue;
 
   constructor(
     private apiService: ApiService
@@ -20,8 +20,8 @@ export class QueueComponent implements OnInit {
   }
 
   load(): void {
-    this.apiService.getQueue().toPromise().then(builds => {
-      this.builds = builds;
+    this.apiService.getQueue().toPromise().then(queue => {
+      this.queue = queue;
     });
   }
 }

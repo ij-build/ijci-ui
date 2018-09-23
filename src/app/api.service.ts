@@ -6,6 +6,7 @@ import { map, tap, catchError } from 'rxjs/operators';
 
 import { Project } from './project';
 import { Build, BuildLog } from './build';
+import { Queue } from './queue';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -41,12 +42,12 @@ export class ApiService {
     return this.wrap('getBuilds', observable, []);
   }
 
-  getQueue(): Observable<Build[]> {
+  getQueue(): Observable<Queue> {
     const observable = this.http.get<object[]>('/api/queue').pipe(
-      map(body => parseBuilds(body['builds']))
+      map(body => new Queue(parseBuilds(body['active']), parseBuilds(body['queued'])))
     );
 
-    return this.wrap('getQueue', observable, []);
+    return this.wrap('getQueue', observable, null);
   }
 
   getBuild(buildId: string): Observable<Build> {
