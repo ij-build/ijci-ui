@@ -72,6 +72,7 @@ export class BuildComponent implements OnInit, OnDestroy {
 
   cancel(): void {
     this.apiService.cancelBuild(this.build.buildId).toPromise().then(() => {
+      this.build = null;
       this.load();
     });
   }
@@ -84,6 +85,7 @@ export class BuildComponent implements OnInit, OnDestroy {
 
   requeue(): void {
     this.apiService.requeueBuild(this.build.buildId).toPromise().then(() => {
+      this.build = null;
       this.load();
     });
   }
