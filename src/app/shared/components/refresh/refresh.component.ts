@@ -15,6 +15,10 @@ export class RefreshComponent implements OnInit, OnDestroy {
   }
 
   protected load() {
+    if (this.timerSubscription) {
+      this.stopRefreshing();
+    }
+
     this.timerSubscription = interval(this.interval).pipe(startWith(0)).subscribe(() => {
       this.refresh();
     });
