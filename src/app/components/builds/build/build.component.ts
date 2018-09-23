@@ -1,9 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Build } from '../../../shared/models/build';
 import { ApiService } from '../../../shared/services/api.service';
 import { RefreshComponent } from '../../../shared/components/refresh/refresh.component';
+import { ModalDirective } from '../../../shared/directives/modal.directive';
 
 @Component({
   selector: 'app-build',
@@ -11,6 +12,7 @@ import { RefreshComponent } from '../../../shared/components/refresh/refresh.com
   styleUrls: ['./build.component.css']
 })
 export class BuildComponent extends RefreshComponent implements OnDestroy {
+  @ViewChild(ModalDirective) modal;
   interval = 1000;
 
   build: Build;
@@ -46,7 +48,7 @@ export class BuildComponent extends RefreshComponent implements OnDestroy {
       this.build.merge(build);
     }
 
-    if (build.isTerminal()) {
+    if (build.canceled || build.isTerminal()) {
       this.stopRefreshing();
     }
 
@@ -71,9 +73,9 @@ export class BuildComponent extends RefreshComponent implements OnDestroy {
   }
 
   delete(): void {
-    this.apiService.deleteBuild(this.build.buildId).toPromise().then(() => {
+    this.modal.show(() => this.apiService.deleteBuild(this.build.buildId).toPromise().then(() => {
       this.router.navigate(['/builds']);
-    });
+    }));
   }
 
   requeue(): void {

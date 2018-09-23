@@ -15,6 +15,19 @@
 
   <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
 
+  <div appModal class="ui modal">
+    <div class="ui icon header">
+      <i class="exclamation triangle icon"></i> Delete build?
+    </div>
+    <div class="content">
+      <p>This will delete all associated artifacts and and logs.</p>
+    </div>
+    <div class="actions">
+      <div class="ui basic cancel button"><i class="check icon"></i> No</div>
+      <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
+    </div>
+  </div>
+
   <div class="ui center aligned basic segment">
     <div class="ui ordered horizontal steps">
       <div class="step" [ngClass]="{'active': build.isQueued() && build.queuedAt == build.createdAt}">
