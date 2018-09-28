@@ -1,43 +1,37 @@
 <h2>Active Builds</h2>
 
-<div class="ui unstackable divided items" *ngIf="queue">
-  <div *ngFor="let build of queue.activeBuilds" class="item">
-    <div class="status-icon"></div>
-
+<div class="ui relaxed divided list" *ngIf="activeBuilds.length > 0">
+  <div *ngFor="let build of activeBuilds" class="item">
     <div class="content">
-      <a class="header" routerLink="/builds/{{build.buildId}}">{{build.project.name}}</a>
+      <p class="header">
+        Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
+        of <a routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a>
+      </p>
 
-      <div class="extra">
-        <div class="ui grid">
-          <div class="two column row">
-            <div class="column">
-              <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="description">Started {{build.startedAt | amCalendar | lowercase}}</div>
     </div>
   </div>
 </div>
 
+<div class="ui center aligned segment" *ngIf="activeBuilds.length == 0">
+  No builds are currently active.
+</div>
+
 <h2>Queued Builds</h2>
 
-<div class="ui unstackable divided items" *ngIf="queue">
-  <div *ngFor="let build of queue.queuedBuilds" class="item">
-    <div class="status-icon"></div>
-
+<div class="ui relaxed divided list" *ngIf="queuedBuilds.length > 0">
+  <div *ngFor="let build of queuedBuilds" class="item">
     <div class="content">
-      <a class="header" routerLink="/builds/{{build.buildId}}">{{build.project.name}}</a>
+      <p class="header">
+        Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
+        of <a routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a>
+      </p>
 
-      <div class="extra">
-        <div class="ui grid">
-          <div class="two column row">
-            <div class="column">
-              <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="description">Queued {{build.queuedAt | amCalendar | lowercase}}</div>
     </div>
   </div>
+</div>
+
+<div class="ui center aligned segment" *ngIf="queuedBuilds.length == 0">
+  No builds are currently queued.
 </div>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Queue } from '../../shared/models/queue';
+import { Build } from '../../shared/models/build';
 import { ApiService } from '../../shared/services/api.service';
 import { RefreshComponent } from '../../shared/components/refresh/refresh.component';
 
@@ -10,7 +10,8 @@ import { RefreshComponent } from '../../shared/components/refresh/refresh.compon
   styleUrls: ['./queue.component.css']
 })
 export class QueueComponent extends RefreshComponent {
-  queue: Queue;
+  activeBuilds: Build[];
+  queuedBuilds: Build[];
 
   constructor(
     private apiService: ApiService
@@ -19,8 +20,12 @@ export class QueueComponent extends RefreshComponent {
   }
 
   refresh(): void {
-    this.apiService.getQueue().toPromise().then(queue => {
-      this.queue = queue;
+    Promise.all([
+      this.apiService.getActiveBuilds().toPromise(),
+      this.apiService.getQueuedBuilds().toPromise()
+    ]).then(([activeBuilds, queuedBuilds]) => {
+      this.activeBuilds = activeBuilds;
+      this.queuedBuilds = queuedBuilds;
     });
   }
 }
