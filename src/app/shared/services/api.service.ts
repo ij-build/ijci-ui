@@ -5,8 +5,8 @@ import { Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import { Project } from '../models/project';
-import { Build, BuildLog } from '../models/build';
-import { Queue } from '../models/queue';
+import { Build } from '../models/build';
+import { BuildLog } from '../models/buildlog';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -34,6 +34,14 @@ export class ApiService {
     return this.wrap('getProject', observable, null);
   }
 
+  getProjectBuilds(projectId: string): Observable<Build[]> {
+    const observable = this.http.get<object[]>(`/api/projects/${projectId}/builds`).pipe(
+      map(body => parseBuilds(body['builds']))
+    );
+
+    return this.wrap('getProjectBuilds', observable, []);
+  }
+
   getBuilds(): Observable<Build[]> {
     const observable = this.http.get<object[]>('/api/builds').pipe(
       map(body => parseBuilds(body['builds']))
@@ -42,12 +50,20 @@ export class ApiService {
     return this.wrap('getBuilds', observable, []);
   }
 
-  getQueue(): Observable<Queue> {
-    const observable = this.http.get<object[]>('/api/queue').pipe(
-      map(body => new Queue(parseBuilds(body['active']), parseBuilds(body['queued'])))
+  getActiveBuilds(): Observable<Build[]> {
+    const observable = this.http.get<object[]>('/api/builds/active').pipe(
+      map(body => parseBuilds(body['builds']))
     );
 
-    return this.wrap('getQueue', observable, null);
+    return this.wrap('getActiveBuilds', observable, null);
+  }
+
+  getQueuedBuilds(): Observable<Build[]> {
+    const observable = this.http.get<object[]>('/api/builds/queued').pipe(
+      map(body => parseBuilds(body['builds']))
+    );
+
+    return this.wrap('getQueuedBuilds', observable, null);
   }
 
   getBuild(buildId: string): Observable<Build> {
@@ -195,7 +211,6 @@ function parseProject(data: object): Project {
     data['last_build_id'],
     data['last_build_status'],
     data['last_build_completed_at'],
-    (data['builds'] || []).map(parseBuild)
   );
 }
 
@@ -223,7 +238,6 @@ function parseBuild(data: object): Build {
     data['queued_at'],
     data['started_at'],
     data['completed_at'],
-    data['canceled'],
     (data['build_logs'] || []).map(parseBuildLog)
   );
 }

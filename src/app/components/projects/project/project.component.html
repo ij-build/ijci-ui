@@ -1,10 +1,16 @@
 <div *ngIf="project">
-  <h2>Project {{project.name}}</h2>
+  <div class="ui two column stackable aligned grid">
+    <div class="twelve wide left aligned column">
+      <h2>Project {{project.name}}</h2>
+    </div>
 
-  <div>
-    <a class="ui primary basic button" (click)="queue()"><i class="cogs icon"></i> Queue Build</a>
-    <a class="ui primary basic button" routerLink="/projects/{{project.projectId}}/edit"><i class="pencil icon"></i> Edit Project</a>
-    <a class="ui negative basic button" (click)="delete()"><i class="trash alternate icon"></i> Delete</a>
+    <div class="four wide right aligned column">
+      <div class="ui icon basic buttons">
+        <button appPopup class="ui button" data-content="Queue Build" (click)="queue()"><i class="cogs icon"></i></button>
+        <button appPopup class="ui button" data-content="Edit Project" routerLink="/projects/{{project.projectId}}/edit"><i class="pencil icon"></i></button>
+        <button appPopup class="ui button" data-content="Delete Project" (click)="delete()"><i class="red trash alternate icon"></i></button>
+      </div>
+    </div>
   </div>
 
   <div appModal class="ui modal">
@@ -20,38 +26,47 @@
     </div>
   </div>
 
-  <p>{{project.repositoryUrl}}</p>
+  <div class="ui top attached tabular menu">
+    <a appTab class="item active" data-tab="meta-tab">Meta</a>
+    <a appTab class="item" data-tab="builds-tab">Builds</a>
+  </div>
 
-  <div class="ui unstackable divided items">
-    <div *ngFor="let build of project.builds" class="item">
-      <div class="status-icon" [ngClass]="{
-        'positive': build.isSucceeded(),
-        'negative': build.isFailed() || build.isErrored()
-      }"></div>
+  <div class="ui bottom attached tab segment" data-tab="meta-tab">
+      <p>{{project.repositoryUrl}}</p>
+    </div>
 
-      <div class="content">
-        <i class="icon check positive" *ngIf="build.isSucceeded()"></i>
-        <i class="icon bug negative" *ngIf="build.isFailed() || build.isErrored()"></i>
-        <a class="header" routerLink="/builds/{{build.buildId}}">{{project.name}}</a>
+  <div class="ui bottom attached tab segment" data-tab="builds-tab">
+    <div class="ui unstackable divided items">
+      <div *ngFor="let build of builds" class="item">
+        <div class="status-icon" [ngClass]="{
+          'positive': build.isSucceeded(),
+          'negative': build.isFailed() || build.isErrored()
+        }"></div>
 
-        <div class="description">
-          <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
-        </div>
+        <div class="content">
+          <i class="icon check positive" *ngIf="build.isSucceeded()"></i>
+          <i class="icon bug negative" *ngIf="build.isFailed() || build.isErrored()"></i>
+          <a class="header" routerLink="/builds/{{build.buildId}}">{{project.name}}</a>
 
-        <div class="extra">
-          <div class="ui grid">
-            <div class="two column row">
-              <div class="column">
-                <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
-                <p *ngIf="!build.isQueued()">Last updated {{build.lastUpdatedAt() | amCalendar | lowercase}}</p>
-              </div>
+          <div class="description">
+            <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
+          </div>
 
-              <div class="column">
-                <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
-                <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
-                <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
-                <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.committedAt | amCalendar | lowercase}}</p>
-                <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.committedAt | amCalendar | lowercase}}</p>
+          <div class="extra">
+            <div class="ui grid">
+              <div class="two column row">
+                <div class="column">
+                  <p>Queued {{build.createdAt | amCalendar | lowercase}}</p>
+                  <p *ngIf="!build.isQueued()">Last updated {{build.lastUpdatedAt() | amCalendar | lowercase}}</p>
+                </div>
+
+                <div class="column">
+                  <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
+                  <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
+                  <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
+                  <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.committedAt | amCalendar | lowercase}}</p>
+                  <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.committedAt | amCalendar | lowercase}}</p>
+                </div>
               </div>
             </div>
           </div>

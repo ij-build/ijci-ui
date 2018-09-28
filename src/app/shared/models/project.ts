@@ -8,7 +8,6 @@ export class Project {
     public lastBuildId: string,
     public lastBuildStatus: string,
     public lastBuildCompletedAt: string,
-    public builds: Build[]
   ) { }
 
   isSucceeded(): boolean {

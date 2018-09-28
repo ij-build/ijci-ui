@@ -6,20 +6,22 @@ import { RouterModule, Routes } from '@angular/router';
 import { MomentModule } from 'ngx-moment';
 
 import { AppComponent } from './app.component';
-import { QueueComponent } from './components/queue/queue.component';
-import { ProjectsComponent } from './components/projects/projects/projects.component';
-import { ProjectComponent } from './components/projects/project/project.component';
-import { NewProjectComponent } from './components/projects/project-new/project-new.component';
-import { EditProjectComponent } from './components/projects/project-edit/project-edit.component';
-import { BuildsComponent } from './components/builds/builds/builds.component';
 import { BuildComponent } from './components/builds/build/build.component';
-import { NewBuildComponent } from './components/builds/build-new/build-new.component';
+import { BuildsComponent } from './components/builds/builds/builds.component';
+import { EditProjectComponent } from './components/projects/project-edit/project-edit.component';
 import { MessagesComponent } from './shared/components/messages/messages.component';
+import { NewBuildComponent } from './components/builds/build-new/build-new.component';
+import { NewProjectComponent } from './components/projects/project-new/project-new.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { ProjectComponent } from './components/projects/project/project.component';
+import { ProjectsComponent } from './components/projects/projects/projects.component';
+import { QueueComponent } from './components/queue/queue.component';
+
 import { AccordionDirective } from './shared/directives/accordion.directive';
 import { DropdownDirective } from './shared/directives/dropdown.directive';
-import { PopupDirective } from './shared/directives/popup.directive';
 import { ModalDirective } from './shared/directives/modal.directive';
+import { PopupDirective } from './shared/directives/popup.directive';
+import { TabDirective } from './shared/directives/tab.directive';
 
 const appRoutes: Routes = [
   { path: '404', component: NotfoundComponent },
@@ -37,28 +39,30 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
+    AppComponent,
+    BuildComponent,
+    BuildsComponent,
+    EditProjectComponent,
+    MessagesComponent,
+    NewBuildComponent,
+    NewProjectComponent,
+    NotfoundComponent,
+    ProjectComponent,
+    ProjectsComponent,
+    QueueComponent,
+    // Directives
     AccordionDirective,
     DropdownDirective,
-    MessagesComponent,
-    NotfoundComponent,
-    AppComponent,
-    QueueComponent,
-    ProjectsComponent,
-    ProjectComponent,
-    NewProjectComponent,
-    EditProjectComponent,
-    BuildsComponent,
-    BuildComponent,
-    NewBuildComponent,
+    ModalDirective,
     PopupDirective,
-    ModalDirective
+    TabDirective
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    MomentModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MomentModule
   ],
   providers: [],
   bootstrap: [AppComponent]

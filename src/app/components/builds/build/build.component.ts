@@ -48,7 +48,7 @@ export class BuildComponent extends RefreshComponent implements OnDestroy {
       this.build.merge(build);
     }
 
-    if (build.canceled || build.isTerminal()) {
+    if (build.isTerminal()) {
       this.stopRefreshing();
     }
 

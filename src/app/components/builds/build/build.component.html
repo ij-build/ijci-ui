@@ -1,19 +1,17 @@
 <div *ngIf="build">
-  <h2>Build {{build.project.name}}</h2>
+  <div class="ui two column stackable center aligned grid">
+    <div class="twelve wide left aligned column">
+      <h2>Build {{build.buildId.substring(0, 8)}} of <a routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a></h2>
+    </div>
 
-  <a class="ui basic primary button" (click)="cancel()" *ngIf="!build.canceled && !build.isTerminal()">
-    <i class="stop circle icon"></i> Cancel
-  </a>
-
-  <a class="ui basic primary button" (click)="requeue()" *ngIf="build.canceled || build.isTerminal()">
-    <i class="undo icon"></i> Requeue
-  </a>
-
-  <a class="ui basic negative button" (click)="delete()" *ngIf="build.canceled || build.isTerminal()">
-    <i class="trash alternate icon"></i> Delete
-  </a>
-
-  <a routerLink="/projects/{{build.project.projectId}}">Project Page</a>
+    <div class="four wide right aligned column">
+      <div class="ui icon basic buttons">
+        <button appPopup class="ui button" data-content="Cancel Build" (click)="cancel()" *ngIf="!build.isTerminal()"><i class="stop circle icon"></i></button>
+        <button appPopup class="ui button" data-content="Requeue Build" (click)="requeue()" *ngIf="build.isTerminal()"><i class="undo icon"></i></button>
+        <button appPopup class="ui button" data-content="Delete Build" (click)="delete()" *ngIf="build.isTerminal()"><i class="red trash alternate icon"></i></button>
+      </div>
+    </div>
+  </div>
 
   <div appModal class="ui modal">
     <div class="ui icon header">
@@ -29,7 +27,7 @@
   </div>
 
   <div class="ui center aligned basic segment">
-    <div class="ui ordered horizontal steps">
+    <div class="ui fluid horizontal steps">
       <div class="step" [ngClass]="{'active': build.isQueued() && build.queuedAt == build.createdAt}">
         <div class="content">
           <div class="title">Queued</div>
@@ -44,20 +42,21 @@
         </div>
       </div>
 
-      <div class="step" [ngClass]="{'active': build.isInProgress()}" *ngIf="!build.canceled || build.startedAt">
+      <div class="step" [ngClass]="{'active': build.isInProgress()}" *ngIf="build.startedAt || !build.isCanceled()">
         <div class="content">
-          <div class="title">In Progress</div>
-          <div class="description">{{build.startedAt | date:'short'}}</div>
+          <div class="title"><i class="notched circle loading icon" *ngIf="build.isInProgress()"></i> In Progress</div>
+          <div class="description" *ngIf="build.startedAt">{{build.startedAt | date:'short'}}</div>
         </div>
       </div>
 
-      <div class="step active" *ngIf="build.canceled">
+      <div class="step active" *ngIf="build.isCanceled()">
         <div class="content">
           <div class="title">Canceled</div>
+          <div class="description">{{build.completedAt | date:'short'}}</div>
         </div>
       </div>
 
-      <div class="step" [ngClass]="{'positive': build.isSucceeded(), 'negative': build.isErrored() || build.isFailed()}" *ngIf="!build.canceled">
+      <div class="step" [ngClass]="{'positive': build.isSucceeded(), 'negative': !build.isSucceeded()}" *ngIf="build.isTerminal() && !build.isCanceled()">
         <div class="content">
           <div class="title" *ngIf="!build.isTerminal()">Complete</div>
           <div class="title" *ngIf="build.isTerminal()">{{build.buildStatus | titlecase}}</div>
@@ -67,23 +66,27 @@
     </div>
   </div>
 
-  <div class="ui segment" *ngIf="build.errorMessage">
-    <p>{{build.errorMessage}}</p>
+  <div class="ui top attached tabular menu">
+    <a appTab class="item active" data-tab="meta-tab">Meta</a>
+    <a appTab class="item" data-tab="logs-tab">Logs</a>
   </div>
 
-  <!-- TODO - show branch if possible -->
-  <div class="ui segment" *ngIf="build.commitMessage || build.commitHash">
-    <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
-    <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
-    <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
-    <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
-    <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.commitAuthoredAt | amCalendar | lowercase}}</p>
-    <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.commitCommittedAt | amCalendar | lowercase}}</p>
+  <div class="ui bottom attached tab segment" data-tab="meta-tab">
+    <div class="ui segment" *ngIf="build.errorMessage">
+      <p>{{build.errorMessage}}</p>
+    </div>
+
+    <div class="ui segment" *ngIf="build.commitMessage || build.commitHash">
+      <p *ngIf="build.commitMessage">{{build.commitMessage}}</p>
+      <p *ngIf="build.commitHash"><i class="icon code"></i> {{build.commitHash.substring(0, 8)}} on {{build.commitBranch}}</p>
+      <p *ngIf="build.commitMessage"><i class="icon user"></i> Authored by {{build.commitAuthorName}} <{{build.commitAuthorEmail}}></p>
+      <p *ngIf="build.commitMessage"><i class="icon user"></i> Committed by {{build.commitCommitterName}} <{{build.commitCommitterEmail}}></p>
+      <p *ngIf="build.commitMessage"><i class="icon clock"></i> Authored {{build.commitAuthoredAt | amCalendar | lowercase}}</p>
+      <p *ngIf="build.commitMessage"><i class="icon clock"></i> Committed {{build.commitCommittedAt | amCalendar | lowercase}}</p>
+    </div>
   </div>
 
-  <div *ngIf="build.buildLogs.length > 0">
-    <h2>Logs</h2>
-
+  <div class="ui bottom attached tab segment" data-tab="logs-tab">
     <div *ngFor="let buildLog of build.buildLogs" class="ui accordion field">
       <div appAccordion [enabled]="buildLog.content">
         <div class="title">

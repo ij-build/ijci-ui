@@ -1,4 +1,5 @@
 import { Project } from './project';
+import { BuildLog } from './buildlog';
 
 export class Build {
   constructor(
@@ -20,15 +21,15 @@ export class Build {
     public queuedAt: string,
     public startedAt: string,
     public completedAt: string,
-    public canceled: boolean,
     public buildLogs: BuildLog[]
   ) { }
 
-  isQueued(): boolean { return !this.canceled && this.buildStatus === 'queued'; }
-  isInProgress(): boolean { return !this.canceled && this.buildStatus === 'in-progress'; }
+  isQueued(): boolean { return this.buildStatus === 'queued'; }
+  isInProgress(): boolean { return this.buildStatus === 'in-progress'; }
   isSucceeded(): boolean { return this.buildStatus === 'succeeded'; }
   isFailed(): boolean { return this.buildStatus === 'failed'; }
   isErrored(): boolean { return this.buildStatus === 'errored'; }
+  isCanceled(): boolean { return this.buildStatus === 'canceled'; }
   isTerminal(): boolean { return !this.isQueued() && !this.isInProgress(); }
 
   lastUpdatedAt(): string {
@@ -51,7 +52,6 @@ export class Build {
     this.queuedAt = other.queuedAt;
     this.startedAt = other.startedAt;
     this.completedAt = other.completedAt;
-    this.canceled = other.canceled;
 
     for (const buildLog of other.buildLogs) {
       if (!this.hasBuildLog(buildLog.buildLogId)) {
@@ -63,14 +63,4 @@ export class Build {
   hasBuildLog(buildLogId: string): boolean {
     return this.buildLogs.some(b => b.buildLogId === buildLogId);
   }
-}
-
-export class BuildLog {
-  constructor(
-    public buildLogId: string,
-    public name: string,
-    public createdAt: string,
-    public uploadedAt: string,
-    public content: string
-  ) { }
 }

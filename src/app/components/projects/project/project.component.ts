@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Project } from '../../../shared/models/project';
+import { Build } from '../../../shared/models/build';
 import { ApiService } from '../../../shared/services/api.service';
 import { ModalDirective } from '../../../shared/directives/modal.directive';
 
@@ -13,6 +14,7 @@ import { ModalDirective } from '../../../shared/directives/modal.directive';
 export class ProjectComponent implements OnInit {
   @ViewChild(ModalDirective) modal;
   project: Project;
+  builds: Build[]
 
   constructor(
     private router: Router,
@@ -27,8 +29,12 @@ export class ProjectComponent implements OnInit {
   load(): void {
     const projectId = this.route.snapshot.paramMap.get('project_id');
 
-    this.apiService.getProject(projectId).toPromise().then(project => {
+    Promise.all([
+      this.apiService.getProject(projectId).toPromise(),
+      this.apiService.getProjectBuilds(projectId).toPromise(),
+    ]).then(([project, builds]) => {
       this.project = project;
+      this.builds = builds;
     });
   }
 
