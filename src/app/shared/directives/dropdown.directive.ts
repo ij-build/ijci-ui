@@ -14,7 +14,8 @@ export class DropdownDirective implements OnInit {
 
   ngOnInit() {
     $(this.el.nativeElement).dropdown({
-      onChange: this.onChange
+      onChange: this.onChange,
+      clearable: true,
     });
   }
 }

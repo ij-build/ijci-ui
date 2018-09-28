@@ -3,16 +3,14 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
 declare const $: any;
 
 @Directive({
-  selector: '[appPopup]'
+  selector: '[appTab]'
 })
-export class PopupDirective implements OnInit {
+export class TabDirective implements OnInit {
   constructor(
     private el: ElementRef
   ) { }
 
   ngOnInit() {
-    $(this.el.nativeElement).popup({
-      position: 'bottom center',
-    });
+    $(this.el.nativeElement).tab();
   }
 }
