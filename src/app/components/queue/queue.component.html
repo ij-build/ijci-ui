@@ -1,7 +1,7 @@
 <h2>Active Builds</h2>
 
-<div class="ui relaxed divided list" *ngIf="activeBuilds.length > 0">
-  <div *ngFor="let build of activeBuilds" class="item">
+<div class="ui relaxed divided list" *ngIf="activeResults">
+  <div *ngFor="let build of activeResults.items" class="item">
     <div class="content">
       <p class="header">
         Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
@@ -11,16 +11,20 @@
       <div class="description">Started {{build.startedAt | amCalendar | lowercase}}</div>
     </div>
   </div>
+
+  <div class="ui pagination pointing secondary menu" *ngIf="activeResults && activeResults.numPages > 1">
+    <a *ngFor="let i of seq(activeResults.numPages)" [ngClass]="{'item': true, 'active': results.page == i}" (click)="loadActivePage(i)">{{i}}</a>
+  </div>
 </div>
 
-<div class="ui center aligned segment" *ngIf="activeBuilds.length == 0">
+<div class="ui center aligned segment" *ngIf="activeResults && activeResults.items.length == 0">
   No builds are currently active.
 </div>
 
 <h2>Queued Builds</h2>
 
-<div class="ui relaxed divided list" *ngIf="queuedBuilds.length > 0">
-  <div *ngFor="let build of queuedBuilds" class="item">
+<div class="ui relaxed divided list" *ngIf="queuedResults">
+  <div *ngFor="let build of queuedResults.items" class="item">
     <div class="content">
       <p class="header">
         Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
@@ -30,8 +34,13 @@
       <div class="description">Queued {{build.queuedAt | amCalendar | lowercase}}</div>
     </div>
   </div>
+
+  <div class="ui pagination pointing secondary menu" *ngIf="queuedResults && queuedResults.numPages > 1">
+    <a *ngFor="let i of seq(queuedResults.numPages)" [ngClass]="{'item': true, 'active': queuedResults.page == i}" (click)="loadQueuedPage(i)">{{i}}</a>
+  </div>
+
 </div>
 
-<div class="ui center aligned segment" *ngIf="queuedBuilds.length == 0">
+<div class="ui center aligned segment" *ngIf="queuedResults && queuedResults.items.length == 0">
   No builds are currently queued.
 </div>

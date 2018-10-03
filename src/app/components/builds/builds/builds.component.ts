@@ -1,55 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, Subject } from 'rxjs';
 
 import { Build } from '../../../shared/models/build';
 import { ApiService } from '../../../shared/services/api.service';
+import { PagedResults } from '../../../shared/models/paged-results';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-builds',
   templateUrl: './builds.component.html',
   styleUrls: ['./builds.component.css']
 })
-export class BuildsComponent implements OnInit {
-  builds: Build[];
-  filteredBuilds: Build[];
+export class BuildsComponent implements OnInit, OnDestroy {
+  results: PagedResults<Build>;
   filterQuery = '';
+  subscription: Subscription;
+  keyUp = new Subject<string>();
 
   constructor(
     private apiService: ApiService
   ) { }
 
   ngOnInit() {
+    this.subscription = this.keyUp.pipe(debounceTime(250)).subscribe(_ => {
+      this.load();
+    });
+
     this.load();
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   load(): void {
-    this.apiService.getBuilds().toPromise().then(builds => {
-      this.builds = builds;
-      this.filter();
+    this.apiService.getBuilds(1, this.filterQuery).then(results => {
+      this.results = results;
     });
   }
 
-  filter(): void {
-    this.filteredBuilds = this.builds.filter(b => this.matchesAny([
-      b.project.name,
-      b.project.repositoryUrl,
-      b.commitBranch,
-      b.commitMessage,
-      b.commitHash,
-      b.commitCommitterName,
-      b.commitCommitterEmail,
-      b.commitAuthorName,
-      b.commitAuthorEmail
-    ]));
+  loadPage(page: number) {
+    this.results.getPage(page).then(results => {
+      this.results = results;
+    });
   }
 
-  matchesAny(strings: string[]): boolean {
-    for (const part of this.filterQuery.split(' ')) {
-      if (!strings.filter(s => s).some(s => s.includes(part))) {
-        return false;
-      }
-    }
-
-    return true;
+  seq(n: number): number[] {
+    return Array.from(Array(n).keys()).map(n => n + 1);
   }
 }

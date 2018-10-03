@@ -36,8 +36,8 @@
     </div>
 
   <div class="ui bottom attached tab segment" data-tab="builds-tab">
-    <div class="ui unstackable divided items">
-      <div *ngFor="let build of builds" class="item">
+    <div class="ui unstackable divided items" *ngIf="buildResults">
+      <div *ngFor="let build of buildResults.items" class="item">
         <div class="status-icon" [ngClass]="{
           'positive': build.isSucceeded(),
           'negative': build.isFailed() || build.isErrored()
@@ -72,6 +72,10 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="ui pagination pointing secondary menu" *ngIf="buildResults && buildResults.numPages > 1">
+      <a *ngFor="let i of seq(buildResults.numPages)" [ngClass]="{'item': true, 'active': buildResults.page == i}" (click)="loadPage(i)">{{i}}</a>
     </div>
   </div>
 </div>

@@ -8,6 +8,7 @@ import { Project } from '../models/project';
 import { Build } from '../models/build';
 import { BuildLog } from '../models/buildlog';
 import { MessageService } from './message.service';
+import { PagedResults } from '../models/paged-results';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,8 @@ export class ApiService {
     private messageService: MessageService
   ) { }
 
-  getProjects(): Observable<Project[]> {
-    const observable = this.http.get<object[]>('/api/projects').pipe(
-      map(body => parseProjects(body['projects']))
-    );
-
-    return this.wrap('getProjects', observable, []);
+  getProjects(page: number = 1, filter: string = ''): Promise<PagedResults<Project>> {
+    return this.resultPager('/api/projects', 'projects', parseProjects)(page, filter);
   }
 
   getProject(projectId: string): Observable<Project> {
@@ -34,36 +31,20 @@ export class ApiService {
     return this.wrap('getProject', observable, null);
   }
 
-  getProjectBuilds(projectId: string): Observable<Build[]> {
-    const observable = this.http.get<object[]>(`/api/projects/${projectId}/builds`).pipe(
-      map(body => parseBuilds(body['builds']))
-    );
-
-    return this.wrap('getProjectBuilds', observable, []);
+  getProjectBuilds(projectId: string, page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
+    return this.resultPager(`/api/projects/${projectId}/builds`, 'builds', parseBuilds)(page, filter);
   }
 
-  getBuilds(): Observable<Build[]> {
-    const observable = this.http.get<object[]>('/api/builds').pipe(
-      map(body => parseBuilds(body['builds']))
-    );
-
-    return this.wrap('getBuilds', observable, []);
+  getBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
+    return this.resultPager('/api/builds', 'builds', parseBuilds)(page, filter);
   }
 
-  getActiveBuilds(): Observable<Build[]> {
-    const observable = this.http.get<object[]>('/api/builds/active').pipe(
-      map(body => parseBuilds(body['builds']))
-    );
-
-    return this.wrap('getActiveBuilds', observable, null);
+  getActiveBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
+    return this.resultPager('/api/builds/active', 'builds', parseBuilds)(page, filter);
   }
 
-  getQueuedBuilds(): Observable<Build[]> {
-    const observable = this.http.get<object[]>('/api/builds/queued').pipe(
-      map(body => parseBuilds(body['builds']))
-    );
-
-    return this.wrap('getQueuedBuilds', observable, null);
+  getQueuedBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
+    return this.resultPager('/api/builds/queued', 'builds', parseBuilds)(page, filter);
   }
 
   getBuild(buildId: string): Observable<Build> {
@@ -178,6 +159,25 @@ export class ApiService {
 
   //
   //
+
+  resultPager<E>(baseUrl: string, payloadKey: string, parser: (object) => E[]): (number, string) => Promise<PagedResults<E>> {
+    const self = this;
+
+    const pager = function(page: number, filter: string): Promise<PagedResults<E>> {
+      const observable = self.http.get(`${baseUrl}?page=${page}&filter=${filter}`).pipe(
+        map(body => new PagedResults(
+          parser(body[payloadKey]),
+          page,
+          body['meta']['num_pages'],
+          (page: number) => pager(page, filter),
+        ))
+      );
+
+      return self.wrap('resultPager', observable, null).toPromise();
+    };
+
+    return pager;
+  }
 
   wrap<T>(method: string, observable: Observable<T>, result?: T): Observable<T> {
     const ident = uuid().substring(0, 6);

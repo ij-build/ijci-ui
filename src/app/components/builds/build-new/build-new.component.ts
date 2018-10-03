@@ -24,9 +24,9 @@ export class NewBuildComponent implements OnInit {
   ) { }
 
   ngOnInit () {
-    this.apiService.getProjects().toPromise().then(projects => {
+    this.apiService.getProjects().then(results => {
       this.loaded = true;
-      this.projects = projects;
+      this.projects = results.items;
     });
   }
 

@@ -5,6 +5,7 @@ import { Project } from '../../../shared/models/project';
 import { Build } from '../../../shared/models/build';
 import { ApiService } from '../../../shared/services/api.service';
 import { ModalDirective } from '../../../shared/directives/modal.directive';
+import { PagedResults } from '../../../shared/models/paged-results';
 
 @Component({
   selector: 'app-project',
@@ -14,7 +15,8 @@ import { ModalDirective } from '../../../shared/directives/modal.directive';
 export class ProjectComponent implements OnInit {
   @ViewChild(ModalDirective) modal;
   project: Project;
-  builds: Build[]
+  buildResults: PagedResults<Build>;
+
 
   constructor(
     private router: Router,
@@ -31,10 +33,16 @@ export class ProjectComponent implements OnInit {
 
     Promise.all([
       this.apiService.getProject(projectId).toPromise(),
-      this.apiService.getProjectBuilds(projectId).toPromise(),
-    ]).then(([project, builds]) => {
+      this.apiService.getProjectBuilds(projectId)
+    ]).then(([project, buildResults]) => {
       this.project = project;
-      this.builds = builds;
+      this.buildResults = buildResults;
+    });
+  }
+
+  loadPage(page: number) {
+    this.buildResults.getPage(page).then(results => {
+      this.buildResults = results;
     });
   }
 
@@ -53,5 +61,9 @@ export class ProjectComponent implements OnInit {
     this.modal.show(() => this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
       this.router.navigate(['/projects']);
     }));
+  }
+
+  seq(n: number): number[] {
+    return Array.from(Array(n).keys()).map(n => n + 1);
   }
 }

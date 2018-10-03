@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Build } from '../../shared/models/build';
 import { ApiService } from '../../shared/services/api.service';
 import { RefreshComponent } from '../../shared/components/refresh/refresh.component';
+import { PagedResults } from '../../shared/models/paged-results';
 
 @Component({
   selector: 'app-queue',
@@ -10,8 +11,8 @@ import { RefreshComponent } from '../../shared/components/refresh/refresh.compon
   styleUrls: ['./queue.component.css']
 })
 export class QueueComponent extends RefreshComponent {
-  activeBuilds: Build[];
-  queuedBuilds: Build[];
+  activeResults: PagedResults<Build>;
+  queuedResults: PagedResults<Build>;
 
   constructor(
     private apiService: ApiService
@@ -21,11 +22,28 @@ export class QueueComponent extends RefreshComponent {
 
   refresh(): void {
     Promise.all([
-      this.apiService.getActiveBuilds().toPromise(),
-      this.apiService.getQueuedBuilds().toPromise()
-    ]).then(([activeBuilds, queuedBuilds]) => {
-      this.activeBuilds = activeBuilds;
-      this.queuedBuilds = queuedBuilds;
+      // TODO - get with current page if set
+      this.apiService.getActiveBuilds(),
+      this.apiService.getQueuedBuilds()
+    ]).then(([activeResults, queuedResults]) => {
+      this.activeResults = activeResults;
+      this.queuedResults = queuedResults;
     });
+  }
+
+  loadActivePage(page: number) {
+    this.activeResults.getPage(page).then(activeResults => {
+      this.activeResults = activeResults;
+    });
+  }
+
+  loadQueuedPage(page: number) {
+    this.queuedResults.getPage(page).then(queuedResults => {
+      this.queuedResults = queuedResults;
+    });
+  }
+
+  seq(n: number): number[] {
+    return Array.from(Array(n).keys()).map(n => n + 1);
   }
 }
