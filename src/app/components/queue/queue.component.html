@@ -1,6 +1,11 @@
 <h2>Active Builds</h2>
 
 <div class="ui relaxed divided list" *ngIf="activeResults">
+  <div class="ui left icon input">
+    <i class="search icon"></i>
+    <input #activeSearch type="text" (keyup)="keyUp.next($event)" [(ngModel)]="activeFilterQuery" placeholder="Enter filter term...">
+  </div>
+
   <div *ngFor="let build of activeResults.items" class="item">
     <div class="content">
       <p class="header">
@@ -12,18 +17,23 @@
     </div>
   </div>
 
-  <div class="ui pagination pointing secondary menu" *ngIf="activeResults && activeResults.numPages > 1">
+  <div class="ui pagination pointing secondary menu" *ngIf="activeResults.numPages > 1">
     <a *ngFor="let i of seq(activeResults.numPages)" [ngClass]="{'item': true, 'active': results.page == i}" (click)="loadActivePage(i)">{{i}}</a>
   </div>
-</div>
 
-<div class="ui center aligned segment" *ngIf="activeResults && activeResults.items.length == 0">
-  No builds are currently active.
+  <div class="ui center aligned segment" *ngIf="activeResults.items.length == 0">
+    No builds are currently active.
+  </div>
 </div>
 
 <h2>Queued Builds</h2>
 
 <div class="ui relaxed divided list" *ngIf="queuedResults">
+  <div class="ui left icon input">
+    <i class="search icon"></i>
+    <input #queuedSearch type="text" (keyup)="keyUp.next($event)" [(ngModel)]="queuedFilterQuery" placeholder="Enter filter term...">
+  </div>
+
   <div *ngFor="let build of queuedResults.items" class="item">
     <div class="content">
       <p class="header">
@@ -35,12 +45,11 @@
     </div>
   </div>
 
-  <div class="ui pagination pointing secondary menu" *ngIf="queuedResults && queuedResults.numPages > 1">
+  <div class="ui pagination pointing secondary menu" *ngIf="queuedResults.numPages > 1">
     <a *ngFor="let i of seq(queuedResults.numPages)" [ngClass]="{'item': true, 'active': queuedResults.page == i}" (click)="loadQueuedPage(i)">{{i}}</a>
   </div>
 
-</div>
-
-<div class="ui center aligned segment" *ngIf="queuedResults && queuedResults.items.length == 0">
-  No builds are currently queued.
+  <div class="ui center aligned segment" *ngIf="queuedResults.items.length == 0">
+    No builds are currently queued.
+  </div>
 </div>

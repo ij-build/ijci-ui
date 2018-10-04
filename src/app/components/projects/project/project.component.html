@@ -72,10 +72,10 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="ui pagination pointing secondary menu" *ngIf="buildResults && buildResults.numPages > 1">
-      <a *ngFor="let i of seq(buildResults.numPages)" [ngClass]="{'item': true, 'active': buildResults.page == i}" (click)="loadPage(i)">{{i}}</a>
+      <div class="ui pagination pointing secondary menu" *ngIf="buildResults.numPages > 1">
+        <a *ngFor="let i of seq(buildResults.numPages)" [ngClass]="{'item': true, 'active': buildResults.page == i}" (click)="loadPage(i)">{{i}}</a>
+      </div>
     </div>
   </div>
 </div>
