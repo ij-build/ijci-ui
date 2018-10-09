@@ -1,55 +1,26 @@
-<h2>Active Builds</h2>
-
-<div class="ui relaxed divided list" *ngIf="activeResults">
-  <div class="ui left icon input">
-    <i class="search icon"></i>
-    <input #activeSearch type="text" (keyup)="keyUp.next($event)" [(ngModel)]="activeFilterQuery" placeholder="Enter filter term...">
-  </div>
-
-  <div *ngFor="let build of activeResults.items" class="item">
-    <div class="content">
-      <p class="header">
-        Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
-        of <a routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a>
-      </p>
-
-      <div class="description">Started {{build.startedAt | amCalendar | lowercase}}</div>
+<div class="page-header">
+  <div class="ui two column stackable center aligned grid">
+    <div class="twelve wide left aligned column">
+      <h2>Build Activity</h2>
     </div>
-  </div>
 
-  <div class="ui pagination pointing secondary menu" *ngIf="activeResults.numPages > 1">
-    <a *ngFor="let i of seq(activeResults.numPages)" [ngClass]="{'item': true, 'active': results.page == i}" (click)="loadActivePage(i)">{{i}}</a>
-  </div>
-
-  <div class="ui center aligned segment" *ngIf="activeResults.items.length == 0">
-    No builds are currently active.
+    <div class="four wide right aligned column">
+      <div class="ui icon basic buttons">
+        <button appPopup class="ui button" data-content="Create a Build" routerLink="/builds/new"><i class="add icon"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
-<h2>Queued Builds</h2>
+<div class="ui top attached tabular menu">
+  <a appTab class="item active" data-tab="active-tab">Active</a>
+  <a appTab class="item" data-tab="queued-tab">Queued</a>
+</div>
 
-<div class="ui relaxed divided list" *ngIf="queuedResults">
-  <div class="ui left icon input">
-    <i class="search icon"></i>
-    <input #queuedSearch type="text" (keyup)="keyUp.next($event)" [(ngModel)]="queuedFilterQuery" placeholder="Enter filter term...">
-  </div>
+<div class="ui bottom attached tab segment active" data-tab="active-tab">
+  <app-build-list [loader]='activeLoader.bind(this)'></app-build-list>
+</div>
 
-  <div *ngFor="let build of queuedResults.items" class="item">
-    <div class="content">
-      <p class="header">
-        Build <a routerLink="/builds/{{build.buildId}}">{{build.buildId.substring(0, 8)}}</a>
-        of <a routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a>
-      </p>
-
-      <div class="description">Queued {{build.queuedAt | amCalendar | lowercase}}</div>
-    </div>
-  </div>
-
-  <div class="ui pagination pointing secondary menu" *ngIf="queuedResults.numPages > 1">
-    <a *ngFor="let i of seq(queuedResults.numPages)" [ngClass]="{'item': true, 'active': queuedResults.page == i}" (click)="loadQueuedPage(i)">{{i}}</a>
-  </div>
-
-  <div class="ui center aligned segment" *ngIf="queuedResults.items.length == 0">
-    No builds are currently queued.
-  </div>
+<div class="ui bottom attached tab segment" data-tab="queued-tab">
+  <app-build-list [loader]='queuedLoader.bind(this)'></app-build-list>
 </div>

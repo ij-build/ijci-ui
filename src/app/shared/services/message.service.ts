@@ -10,9 +10,11 @@ export class MessageService {
   messages = [];
 
   add(message: string) {
-    const id = uuid();
-    this.messages.push(new Message(id, message));
-    setTimeout(() => this.remove(id), 5000);
+    if (false) {
+      const id = uuid();
+      this.messages.push(new Message(id, message));
+      setTimeout(() => this.remove(id), 5000);
+    }
   }
 
   remove(id: string) {

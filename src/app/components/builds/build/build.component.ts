@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Md5 } from 'ts-md5/dist/md5';
 
 import { Build } from '../../../shared/models/build';
 import { ApiService } from '../../../shared/services/api.service';
@@ -83,5 +84,9 @@ export class BuildComponent extends RefreshComponent implements OnDestroy {
       this.build = null;
       this.load();
     });
+  }
+
+  gravatar(email: string): string {
+    return `http://gravatar.com/avatar/${Md5.hashStr(email.trim().toLowerCase())}`;
   }
 }

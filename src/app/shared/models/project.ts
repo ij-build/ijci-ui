@@ -1,6 +1,7 @@
 import { Build } from './build';
+import { Status } from './status';
 
-export class Project {
+export class Project extends Status {
   constructor(
     public projectId: string,
     public name: string,
@@ -8,9 +9,7 @@ export class Project {
     public lastBuildId: string,
     public lastBuildStatus: string,
     public lastBuildCompletedAt: string,
-  ) { }
-
-  isSucceeded(): boolean {
-    return this.lastBuildStatus === 'succeeded';
+  ) {
+    super(lastBuildStatus);
   }
 }

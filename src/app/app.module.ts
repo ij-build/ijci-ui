@@ -10,6 +10,8 @@ import { BuildComponent } from './components/builds/build/build.component';
 import { BuildsComponent } from './components/builds/builds/builds.component';
 import { EditProjectComponent } from './components/projects/project-edit/project-edit.component';
 import { MessagesComponent } from './shared/components/messages/messages.component';
+import { BuildListComponent } from './shared/components/build-list/build-list.component';
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { NewBuildComponent } from './components/builds/build-new/build-new.component';
 import { NewProjectComponent } from './components/projects/project-new/project-new.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
@@ -44,6 +46,8 @@ const appRoutes: Routes = [
     BuildsComponent,
     EditProjectComponent,
     MessagesComponent,
+    BuildListComponent,
+    PaginationComponent,
     NewBuildComponent,
     NewProjectComponent,
     NotfoundComponent,
@@ -55,7 +59,7 @@ const appRoutes: Routes = [
     DropdownDirective,
     ModalDirective,
     PopupDirective,
-    TabDirective
+    TabDirective,
   ],
   imports: [
     BrowserModule,

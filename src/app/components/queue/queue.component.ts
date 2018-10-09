@@ -1,37 +1,18 @@
-import { Component } from '@angular/core';
-import { Subscription, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Component, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 
 import { Build } from '../../shared/models/build';
 import { ApiService } from '../../shared/services/api.service';
 import { RefreshComponent } from '../../shared/components/refresh/refresh.component';
 import { PagedResults } from '../../shared/models/paged-results';
+import { BuildListComponent } from 'src/app/shared/components/build-list/build-list.component';
 
 @Component({
   selector: 'app-queue',
   templateUrl: './queue.component.html',
   styleUrls: ['./queue.component.css']
 })
-export class QueueComponent extends RefreshComponent {
-  activeResults: PagedResults<Build>;
-  queuedResults: PagedResults<Build>;
-  activeFilterQuery = '';
-  queuedFilterQuery = '';
-  subscription: Subscription;
-  keyUp = new Subject<string>();
-
-  ngOnInit() {
-    this.subscription = this.keyUp.pipe(debounceTime(250)).subscribe(_ => {
-      this.refresh();
-    });
-
-    super.ngOnInit();
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    this.subscription.unsubscribe();
-  }
+export class QueueComponent extends RefreshComponent implements AfterViewInit {
+  @ViewChildren(BuildListComponent) buildLists: QueryList<BuildListComponent>;
 
   constructor(
     private apiService: ApiService
@@ -39,32 +20,25 @@ export class QueueComponent extends RefreshComponent {
     super();
   }
 
+  ngAfterViewInit() {
+    this.refresh();
+  }
+
+  activeLoader(filterQuery: string): Promise<PagedResults<Build>> {
+    return this.apiService.getActiveBuilds(1, filterQuery);
+  }
+
+  queuedLoader(filterQuery: string): Promise<PagedResults<Build>> {
+    return this.apiService.getQueuedBuilds(1, filterQuery);
+  }
+
   refresh(): void {
-    const activePage = this.activeResults ? this.activeResults.page : 1;
-    const queuedPage = this.queuedResults ? this.queuedResults.page : 1;
+    if (!this.buildLists) {
+      return;
+    }
 
-    Promise.all([
-      this.apiService.getActiveBuilds(activePage, this.activeFilterQuery),
-      this.apiService.getQueuedBuilds(queuedPage, this.queuedFilterQuery)
-    ]).then(([activeResults, queuedResults]) => {
-      this.activeResults = activeResults;
-      this.queuedResults = queuedResults;
-    });
-  }
-
-  loadActivePage(page: number) {
-    this.activeResults.getPage(page).then(activeResults => {
-      this.activeResults = activeResults;
-    });
-  }
-
-  loadQueuedPage(page: number) {
-    this.queuedResults.getPage(page).then(queuedResults => {
-      this.queuedResults = queuedResults;
-    });
-  }
-
-  seq(n: number): number[] {
-    return Array.from(Array(n).keys()).map(n => n + 1);
+    for (const buildList of this.buildLists.toArray()) {
+      buildList.reload();
+    }
   }
 }

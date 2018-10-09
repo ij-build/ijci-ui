@@ -15,8 +15,6 @@ import { PagedResults } from '../../../shared/models/paged-results';
 export class ProjectComponent implements OnInit {
   @ViewChild(ModalDirective) modal;
   project: Project;
-  buildResults: PagedResults<Build>;
-
 
   constructor(
     private router: Router,
@@ -31,19 +29,15 @@ export class ProjectComponent implements OnInit {
   load(): void {
     const projectId = this.route.snapshot.paramMap.get('project_id');
 
-    Promise.all([
-      this.apiService.getProject(projectId).toPromise(),
-      this.apiService.getProjectBuilds(projectId)
-    ]).then(([project, buildResults]) => {
+    this.apiService.getProject(projectId).toPromise().then(project => {
       this.project = project;
-      this.buildResults = buildResults;
     });
   }
 
-  loadPage(page: number) {
-    this.buildResults.getPage(page).then(results => {
-      this.buildResults = results;
-    });
+  loader(filterQuery: string): Promise<PagedResults<Build>> {
+    const projectId = this.route.snapshot.paramMap.get('project_id');
+
+    return this.apiService.getProjectBuilds(projectId, 1, filterQuery);
   }
 
   queue(): void {
@@ -61,9 +55,5 @@ export class ProjectComponent implements OnInit {
     this.modal.show(() => this.apiService.deleteProject(this.project.projectId).toPromise().then(() => {
       this.router.navigate(['/projects']);
     }));
-  }
-
-  seq(n: number): number[] {
-    return Array.from(Array(n).keys()).map(n => n + 1);
   }
 }

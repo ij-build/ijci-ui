@@ -13,6 +13,7 @@ import { PagedResults } from '../../../shared/models/paged-results';
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   results: PagedResults<Project>;
+  page = 1;
   filterQuery = '';
   subscription: Subscription;
   keyUp = new Subject<string>();
@@ -35,17 +36,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   load(): void {
     this.apiService.getProjects(1, this.filterQuery).then(results => {
+      this.page = 1;
       this.results = results;
     });
   }
 
   loadPage(page: number) {
     this.results.getPage(page).then(results => {
+      this.page = page;
       this.results = results;
     });
-  }
-
-  seq(n: number): number[] {
-    return Array.from(Array(n).keys()).map(n => n + 1);
   }
 }

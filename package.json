@@ -25,11 +25,12 @@
     "ng-semantic": "^1.1.13",
     "ngx-moment": "^3.1.0",
     "rxjs": "~6.2.0",
+    "ts-md5": "^1.2.4",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.8.0",
-    "@angular/cli": "~6.2.1",
+    "@angular/cli": "~6.2.3",
     "@angular/compiler-cli": "^6.1.0",
     "@angular/language-service": "^6.1.0",
     "@types/jasmine": "~2.8.8",

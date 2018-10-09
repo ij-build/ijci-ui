@@ -169,7 +169,7 @@ export class ApiService {
           parser(body[payloadKey]),
           page,
           body['meta']['num_pages'],
-          (page: number) => pager(page, filter),
+          (n: number) => pager(n, filter),
         ))
       );
 

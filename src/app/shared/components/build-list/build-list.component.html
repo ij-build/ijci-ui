@@ -1,0 +1,62 @@
+<div class="ui secondary pointing menu">
+  <div class="right menu">
+    <div class="ui right aligned category search item">
+      <div class="ui transparent icon input">
+        <input #search type="text" (keyup)="keyUp.next($event)" [(ngModel)]="filterQuery" placeholder="Enter filter term...">
+        <i class="search link icon"></i>
+      </div>
+      <div class="results"></div>
+    </div>
+  </div>
+</div>
+
+<table class="ui bottom attached small celled striped table" *ngIf="results">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Build</th>
+      <th>Commit</th>
+      <th class="collapsing">Last Activity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="results.items.length == 0">
+      <td colspan="4" class="center aligned">
+        No builds.
+      </td>
+    </tr>
+    <tr *ngFor="let build of results.items">
+      <td *ngIf="build.isSucceeded()" class="collapsing positive center aligned"><i class="icon checkmark"></i></td>
+      <td *ngIf="build.isFailed() || build.isErrored()" class="collapsing negative center aligned"><i class="icon exclamation circle"></i></td>
+      <td *ngIf="build.isCanceled()" class="collapsing grey center aligned"><i class="icon minus circle"></i></td>
+      <td *ngIf="!build.isTerminal()" class="collapsing"></td>
+
+      <td class="collapsing">
+        <div class="ui breadcrumb">
+          <span *ngIf="build.project.projectId">
+            <a class="section" routerLink="/projects/{{build.project.projectId}}">{{build.project.name}}</a>
+            <span class="divider">/</span>
+          </span>
+          <a class="section" routerLink="/builds/{{build.buildId}}">#{{build.shortBuildId}}</a>
+        </div>
+      </td>
+
+      <td>
+        <div *ngIf="build.commitMessage">
+          {{build.shortCommitHash}}: {{build.commitMessage}}
+        </div>
+      </td>
+
+      <td class="collapsing">
+        {{build.lastUpdatedAt() | amCalendar:null:calendarOptions}}
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="results.numPages > 1">
+    <tr>
+      <th colspan="4">
+        <app-pagination [page]='results.page' [numPages]='results.numPages' [loadPage]='loadPage.bind(this)'></app-pagination>
+      </th>
+    </tr>
+  </tfoot>
+</table>
