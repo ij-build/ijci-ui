@@ -55,12 +55,7 @@
     </div>
   </div>
 
-  <div class="ui top attached tabular menu">
-    <a appTab class="item active" data-tab="meta-tab">Meta</a>
-    <a appTab class="item" data-tab="logs-tab">Logs</a>
-  </div>
-
-  <div class="ui bottom attached tab segment active" data-tab="meta-tab">
+  <div class="ui segment">
     <div class="ui segment" *ngIf="build.errorMessage">
       <p>{{build.errorMessage}}</p>
     </div>
@@ -95,7 +90,7 @@
     </div>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="logs-tab">
+  <div class="ui segment">
     <div *ngFor="let buildLog of build.buildLogs" class="ui accordion field">
       <div appAccordion [enabled]="buildLog.content">
         <div class="title">
@@ -113,14 +108,16 @@
 </div>
 
 <div appModal class="ui modal">
-    <div class="ui icon header">
-      <i class="exclamation triangle icon"></i> Delete build?
-    </div>
-    <div class="content">
-      <p>This will delete all associated artifacts and and logs.</p>
-    </div>
-    <div class="actions">
-      <div class="ui basic cancel button"><i class="check icon"></i> No</div>
-      <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
-    </div>
+  <div class="ui icon header">
+    <i class="exclamation triangle icon"></i> Delete build?
   </div>
+
+  <div class="content">
+    <p>This will delete all associated artifacts and and logs.</p>
+  </div>
+
+  <div class="actions">
+    <div class="ui basic cancel button"><i class="check icon"></i> No</div>
+    <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
+  </div>
+</div>

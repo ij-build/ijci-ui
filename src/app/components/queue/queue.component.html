@@ -12,15 +12,10 @@
   </div>
 </div>
 
-<div class="ui top attached tabular menu">
-  <a appTab class="item active" data-tab="active-tab">Active</a>
-  <a appTab class="item" data-tab="queued-tab">Queued</a>
+<div class="ui segment">
+  <app-build-list [loader]='activeLoader.bind(this)' [prefix]='"active"'></app-build-list>
 </div>
 
-<div class="ui bottom attached tab segment active" data-tab="active-tab">
-  <app-build-list [loader]='activeLoader.bind(this)'></app-build-list>
-</div>
-
-<div class="ui bottom attached tab segment" data-tab="queued-tab">
-  <app-build-list [loader]='queuedLoader.bind(this)'></app-build-list>
+<div class="ui segment">
+  <app-build-list [loader]='queuedLoader.bind(this)' [prefix]='"queued"'></app-build-list>
 </div>

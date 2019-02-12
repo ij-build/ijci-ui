@@ -13,29 +13,26 @@
     </div>
   </div>
 
-  <div class="ui top attached tabular menu">
-    <a appTab class="item active" data-tab="meta-tab">Meta</a>
-    <a appTab class="item" data-tab="builds-tab">Builds</a>
-  </div>
-
-  <div class="ui bottom attached tab segment active" data-tab="meta-tab">
+  <div class="ui segment">
     <p>{{project.repositoryUrl}}</p>
   </div>
 
-  <div class="ui bottom attached tab segment" data-tab="builds-tab">
+  <div class="ui segment">
     <app-build-list [loader]='loader.bind(this)'></app-build-list>
   </div>
+</div>
 
-  <div appModal class="ui modal">
-    <div class="ui icon header">
-      <i class="exclamation triangle icon"></i> Delete project?
-    </div>
-    <div class="content">
-      <p>This will delete all associated builds, history, artifacts, and logs.</p>
-    </div>
-    <div class="actions">
-      <div class="ui basic cancel button"><i class="check icon"></i> No</div>
-      <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
-    </div>
+<div appModal class="ui modal">
+  <div class="ui icon header">
+    <i class="exclamation triangle icon"></i> Delete project?
+  </div>
+
+  <div class="content">
+    <p>This will delete all associated builds, history, artifacts, and logs.</p>
+  </div>
+
+  <div class="actions">
+    <div class="ui basic cancel button"><i class="check icon"></i> No</div>
+    <div class="ui red ok button"><i class="delete icon"></i> Delete</div>
   </div>
 </div>

@@ -23,7 +23,6 @@ import { AccordionDirective } from './shared/directives/accordion.directive';
 import { DropdownDirective } from './shared/directives/dropdown.directive';
 import { ModalDirective } from './shared/directives/modal.directive';
 import { PopupDirective } from './shared/directives/popup.directive';
-import { TabDirective } from './shared/directives/tab.directive';
 
 const appRoutes: Routes = [
   { path: '404', component: NotfoundComponent },
@@ -59,7 +58,6 @@ const appRoutes: Routes = [
     DropdownDirective,
     ModalDirective,
     PopupDirective,
-    TabDirective,
   ],
   imports: [
     BrowserModule,
