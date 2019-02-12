@@ -1,0 +1,29 @@
+environment:
+  - NODE_IMAGE=node:carbon-alpine
+
+import:
+  files: '*'
+
+export:
+  files:
+    - dist
+
+tasks:
+  build:
+    image: ${NODE_IMAGE}
+    script: |
+      npm install
+      npm link @angular/cli
+      ng build --prod
+      rm -r node_modules
+
+plans:
+  build:
+    stages:
+      - name: build
+        tasks:
+          - name: build
+
+metaplans:
+  default:
+    - build

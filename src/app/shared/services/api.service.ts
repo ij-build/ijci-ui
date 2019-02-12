@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEvent, HttpEventType } from '@angular/common/http';
 import { v4 as uuid } from 'uuid';
@@ -20,11 +21,11 @@ export class ApiService {
   ) { }
 
   getProjects(page: number = 1, filter: string = ''): Promise<PagedResults<Project>> {
-    return this.resultPager('/api/projects', 'projects', parseProjects)(page, filter);
+    return this.resultPager(`${environment.baseUrl}/projects`, 'projects', parseProjects)(page, filter);
   }
 
   getProject(projectId: string): Observable<Project> {
-    const observable = this.http.get<object[]>(`/api/projects/${projectId}`).pipe(
+    const observable = this.http.get<object[]>(`${environment.baseUrl}/projects/${projectId}`).pipe(
       map(body => parseProject(body['project']))
     );
 
@@ -32,23 +33,23 @@ export class ApiService {
   }
 
   getProjectBuilds(projectId: string, page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
-    return this.resultPager(`/api/projects/${projectId}/builds`, 'builds', parseBuilds)(page, filter);
+    return this.resultPager(`${environment.baseUrl}/projects/${projectId}/builds`, 'builds', parseBuilds)(page, filter);
   }
 
   getBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
-    return this.resultPager('/api/builds', 'builds', parseBuilds)(page, filter);
+    return this.resultPager(`${environment.baseUrl}/builds`, 'builds', parseBuilds)(page, filter);
   }
 
   getActiveBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
-    return this.resultPager('/api/builds/active', 'builds', parseBuilds)(page, filter);
+    return this.resultPager(`${environment.baseUrl}/builds/active`, 'builds', parseBuilds)(page, filter);
   }
 
   getQueuedBuilds(page: number = 1, filter: string = ''): Promise<PagedResults<Build>> {
-    return this.resultPager('/api/builds/queued', 'builds', parseBuilds)(page, filter);
+    return this.resultPager(`${environment.baseUrl}/builds/queued`, 'builds', parseBuilds)(page, filter);
   }
 
   getBuild(buildId: string): Observable<Build> {
-    const observable = this.http.get(`/api/builds/${buildId}`).pipe(
+    const observable = this.http.get(`${environment.baseUrl}/builds/${buildId}`).pipe(
       map(body => parseBuild(body['build']))
     );
 
@@ -56,7 +57,7 @@ export class ApiService {
   }
 
   deleteBuild(buildId: string): Observable<void> {
-    const observable = this.http.delete(`/api/builds/${buildId}`).pipe(
+    const observable = this.http.delete(`${environment.baseUrl}/builds/${buildId}`).pipe(
       map(_ => null)
     );
 
@@ -64,7 +65,7 @@ export class ApiService {
   }
 
   getBuildLog(buildId: string, buildLogId: string): Observable<string> {
-    const request = new HttpRequest('GET', `/api/builds/${buildId}/logs/${buildLogId}`, {
+    const request = new HttpRequest('GET', `${environment.baseUrl}/builds/${buildId}/logs/${buildLogId}`, {
       responseType: 'text',
       reportProgress: true
     });
@@ -92,7 +93,7 @@ export class ApiService {
       'repository_url': repositoryUrl,
     };
 
-    const observable = this.http.post('/api/projects', payload).pipe(
+    const observable = this.http.post(`${environment.baseUrl}/projects`, payload).pipe(
       map(body => body['project']['project_id'])
     );
 
@@ -105,7 +106,7 @@ export class ApiService {
       'repository_url': project.repositoryUrl,
     };
 
-    const observable = this.http.patch(`/api/projects/${project.projectId}`, payload).pipe(
+    const observable = this.http.patch(`${environment.baseUrl}/projects/${project.projectId}`, payload).pipe(
       map(body => parseProject(body['project']))
     );
 
@@ -113,7 +114,7 @@ export class ApiService {
   }
 
   deleteProject(projectId: string): Observable<void> {
-    const observable = this.http.delete(`/api/projects/${projectId}`).pipe(
+    const observable = this.http.delete(`${environment.baseUrl}/projects/${projectId}`).pipe(
       map(_ => null)
     );
 
@@ -134,7 +135,7 @@ export class ApiService {
       }
     }
 
-    const observable = this.http.post('/api/builds', payload).pipe(
+    const observable = this.http.post(`${environment.baseUrl}/builds`, payload).pipe(
       map(body => body['build']['build_id'])
     );
 
@@ -142,7 +143,7 @@ export class ApiService {
   }
 
   cancelBuild(buildId: string): Observable<void> {
-    const observable = this.http.post(`/api/builds/${buildId}/cancel`, {}).pipe(
+    const observable = this.http.post(`${environment.baseUrl}/builds/${buildId}/cancel`, {}).pipe(
       map(_ => null)
     );
 
@@ -150,7 +151,7 @@ export class ApiService {
   }
 
   requeueBuild(buildId: string): Observable<void> {
-    const observable = this.http.post(`/api/builds/${buildId}/requeue`, {}).pipe(
+    const observable = this.http.post(`${environment.baseUrl}/builds/${buildId}/requeue`, {}).pipe(
       map(_ => null)
     );
 
