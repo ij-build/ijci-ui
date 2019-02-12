@@ -14,7 +14,7 @@ export class BuildsComponent {
     private apiService: ApiService
   ) { }
 
-  loader(filterQuery: string): Promise<PagedResults<Build>> {
-    return this.apiService.getBuilds(1, filterQuery);
+  loader(page: number, filterQuery: string): Promise<PagedResults<Build>> {
+    return this.apiService.getBuilds(page, filterQuery);
   }
 }

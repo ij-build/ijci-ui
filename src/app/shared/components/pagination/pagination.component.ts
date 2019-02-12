@@ -10,7 +10,7 @@ const MaxPages = 7;
 export class PaginationComponent {
   @Input() page: number;
   @Input() numPages: number;
-  @Input() loadPage: (number) => void;
+  @Input() loader: (number) => void;
 
   constructor() { }
 

@@ -1,6 +1,6 @@
-<div class="ui right floated pagination menu">
-  <a *ngIf="seq(numPages)[0] > 1" class="item" (click)="loadPage(1)">1</a>
-  <a *ngIf="seq(numPages)[0] > 2" class="disabled item">...</a>
-  <a *ngFor="let i of seq(numPages)" [ngClass]="{'item': true, 'active': page == i}" (click)="loadPage(i)">{{i}}</a>
-  <a *ngIf="seq(numPages)[seq(numPages).length - 1] != numPages" class="disabled item">...</a>
+<div class="ui right floated secondary pointing menu">
+  <a *ngIf="seq()[0] > 1" class="item" (click)="loader(1)">1</a>
+  <a *ngIf="seq()[0] > 2" class="disabled item">...</a>
+  <a *ngFor="let i of seq()" [ngClass]="{'item': true, 'active': page == i}" (click)="loader(i)">{{i}}</a>
+  <a *ngIf="seq()[seq().length - 1] != numPages" class="disabled item">...</a>
 </div>

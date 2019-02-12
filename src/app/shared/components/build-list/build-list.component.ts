@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { Build } from '../../../shared/models/build';
 import { PagedResults } from '../../../shared/models/paged-results';
+import { updateParams } from '../../utils/pagination';
+
 
 @Component({
   selector: 'app-build-list',
@@ -11,7 +14,8 @@ import { PagedResults } from '../../../shared/models/paged-results';
   styleUrls: ['./build-list.component.css']
 })
 export class BuildListComponent implements OnInit, OnDestroy {
-  @Input() loader: (string) => Promise<PagedResults<Build>>;
+  @Input() loader: (number, string) => Promise<PagedResults<Build>>;
+  @Input() prefix = '';
   results: PagedResults<Build>;
   page = 1;
   filterQuery = '';
@@ -24,44 +28,45 @@ export class BuildListComponent implements OnInit, OnDestroy {
     lastWeek: 'ddd hh:mm a',
   };
 
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) { }
+
   ngOnInit() {
+    this.page = this.route.snapshot.queryParams[`${this.prefix}-page`] || 1;
+    this.filterQuery = this.route.snapshot.queryParams[`${this.prefix}-filterQuery`] || '';
+
     this.subscription = this.keyUp.pipe(debounceTime(250)).subscribe(_ => {
-      this.load();
+      this.load(1);
     });
 
-    this.load();
+    this.load(this.page);
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  load(): void {
-    this.loader(this.filterQuery).then(results => {
-      this.page = 1;
-      this.results = results;
+  load(page: number): void {
+    this.loader(page, this.filterQuery).then(results => {
+      this.updateResults(results, page);
     });
   }
 
-  loadPage(page: number) {
-    const self = this;
-
-    this.results.getPage(page).then(results => {
-      if (page > results.numPages && results.numPages > 0) {
-        self.loadPage(results.numPages);
-        return;
-      }
-
-      this.page = page;
-      this.results = results;
-    });
+  reload(): void {
+    this.load(this.page);
   }
 
-  reload() {
-    if (this.results) {
-      this.loadPage(this.page);
-    } else {
-      this.load();
+  updateResults(results: PagedResults<Build>, page: number) {
+    if (page > results.numPages && results.numPages > 0) {
+      this.load(results.numPages);
+      return;
     }
+
+    this.page = page;
+    this.results = results;
+
+    updateParams(this.route, this.router, this.prefix, page, this.filterQuery);
   }
 }

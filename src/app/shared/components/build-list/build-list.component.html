@@ -55,7 +55,7 @@
   <tfoot *ngIf="results.numPages > 1">
     <tr>
       <th colspan="4">
-        <app-pagination [page]='results.page' [numPages]='results.numPages' [loadPage]='loadPage.bind(this)'></app-pagination>
+        <app-pagination [page]='results.page' [numPages]='results.numPages' [loader]='load.bind(this)'></app-pagination>
       </th>
     </tr>
   </tfoot>

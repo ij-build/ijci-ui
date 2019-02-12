@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -15,7 +15,6 @@ import { ModalDirective } from '../../../shared/directives/modal.directive';
 export class BuildComponent extends RefreshComponent implements OnDestroy {
   @ViewChild(ModalDirective) modal;
   interval = 1000;
-
   build: Build;
   activeLogs = new Set<string>();
   logSubscriptions = [];

@@ -1,4 +1,5 @@
-import { Component, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, ViewChildren, QueryList, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Build } from '../../shared/models/build';
 import { ApiService } from '../../shared/services/api.service';
@@ -15,6 +16,8 @@ export class QueueComponent extends RefreshComponent implements AfterViewInit {
   @ViewChildren(BuildListComponent) buildLists: QueryList<BuildListComponent>;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private apiService: ApiService
   ) {
     super();
@@ -24,12 +27,12 @@ export class QueueComponent extends RefreshComponent implements AfterViewInit {
     this.refresh();
   }
 
-  activeLoader(filterQuery: string): Promise<PagedResults<Build>> {
-    return this.apiService.getActiveBuilds(1, filterQuery);
+  activeLoader(page: number, filterQuery: string): Promise<PagedResults<Build>> {
+    return this.apiService.getActiveBuilds(page, filterQuery);
   }
 
-  queuedLoader(filterQuery: string): Promise<PagedResults<Build>> {
-    return this.apiService.getQueuedBuilds(1, filterQuery);
+  queuedLoader(page: number, filterQuery: string): Promise<PagedResults<Build>> {
+    return this.apiService.getQueuedBuilds(page, filterQuery);
   }
 
   refresh(): void {

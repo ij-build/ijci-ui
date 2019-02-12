@@ -31,6 +31,10 @@
   margin-bottom: 1em;
 }
 
+.form-column {
+  max-width: 540px;
+}
+
 @media only screen and (max-width:767px) {
   .ui.grid > [class*="left aligned"].column.column,
   .ui.grid > [class*="right aligned"].column.column {

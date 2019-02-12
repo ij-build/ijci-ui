@@ -34,10 +34,10 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  loader(filterQuery: string): Promise<PagedResults<Build>> {
+  loader(page: number, filterQuery: string): Promise<PagedResults<Build>> {
     const projectId = this.route.snapshot.paramMap.get('project_id');
 
-    return this.apiService.getProjectBuilds(projectId, 1, filterQuery);
+    return this.apiService.getProjectBuilds(projectId, page, filterQuery);
   }
 
   queue(): void {
