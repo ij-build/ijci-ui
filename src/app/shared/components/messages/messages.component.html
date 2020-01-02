@@ -1,6 +1,0 @@
-<div *ngIf="messageService.messages.length" class="debug-pane">
-  <div
-    class="ui yellow message"
-    *ngFor="let message of messageService.messages.slice().reverse()"
-    (click)="messageService.remove(message.id)">{{message.message}}</div>
-</div>

@@ -1,0 +1,25 @@
+{
+  "tabWidth": 4,
+  "printWidth": 120,
+  "proseWrap": "preserve",
+  "semi": false,
+  "trailingComma": "all",
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": "{*.js?(on),*.md,.prettierrc,.stylelintrc}",
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "{tsconfig.json}",
+      "options": {
+        "parser": "json5",
+        "quoteProps": "preserve",
+        "singleQuote": false,
+        "trailingComma": "all"
+      }
+    }
+  ]
+}
